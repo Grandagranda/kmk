@@ -1,0 +1,328 @@
+/* ==========================================================================
+   Телефон и планшет (≤ 900) — макет «mobile» (Figma r8neKaI1…, узел 19:9), кадр 360.
+   Контентная колонка 320 с полями по 20. Сетка резиновая, как на компьютере:
+   1rem = 10px кадра при ширине 360, дальше всё растёт с шириной экрана (100vw / 36).
+   Шире 600 (планшет) масштаб больше не растёт — колонка 360 кадра встаёт по центру.
+   Координаты в комментариях — y в кадре макета.
+   Фоны секций (свечения, размытые снимки) — рендер слоёв макета без текста: img/m/plate-*.webp,
+   ширина 36rem, от верха секции.
+   ========================================================================== */
+html{font-size:calc(100vw / 36)}
+@media (min-width:600px){html{font-size:16.6667px}}
+
+.m-only{display:inline}
+
+/* колонка 320 */
+.wrap,.in-frame,.st-frame{width:32rem;max-width:none}
+
+/* надзаголовок: черта 11 + 8 + Manrope 11, разрядка 24 % */
+.ab-ey,.in-ey{gap:.8rem;height:1.7rem;font:700 1.1rem/1.35 Manrope,sans-serif;letter-spacing:.24em}
+.ab-ey i,.in-ey i{width:1.1rem}
+
+/* ─────────── бургер и липкая шапка ─────────── */
+.burger{display:grid;place-content:center;gap:.6rem;width:4.4rem;height:4.4rem;padding:0;border:1px solid rgba(255,255,255,.2);
+  border-radius:50%;background:rgba(10,10,10,.3);color:#fff;cursor:pointer;-webkit-tap-highlight-color:transparent}
+.burger i{display:block;width:1.6rem;height:.15rem;background:currentColor;transition:transform .5s var(--ease)}
+html.is-menu .burger i:first-child{transform:translateY(.375rem) rotate(45deg)}
+html.is-menu .burger i:last-child{transform:translateY(-.375rem) rotate(-45deg)}
+.bar-in{height:6.4rem}
+.bar-brand{gap:1.08rem}
+.bar-brand img{width:2.6rem}
+.bar-brand span{font:600 1.62rem/1 "Inter Tight",sans-serif;letter-spacing:.11em}
+.bar-nav,.bar-act .soc{display:none}
+.bar-act{gap:.8rem}
+.bar-act .pill-sm{height:4.4rem;padding:0 2rem;font-size:1.4rem}
+html.is-menu .bar{transform:none;background:#0a0a0a;border-bottom-color:transparent;-webkit-backdrop-filter:none;backdrop-filter:none}
+html.is-menu .bar .pill{visibility:hidden}
+
+/* ─────────── меню (кадр «Меню (открыто)», 19:413) ─────────── */
+.mnav{display:flex;position:fixed;inset:0;z-index:39;flex-direction:column;padding:8.8rem 0 2.8rem;background:#0a0a0a;
+  overflow-y:auto;overscroll-behavior:contain;opacity:0;visibility:hidden;transition:opacity .4s ease,visibility 0s .4s}
+html.is-menu .mnav{opacity:1;visibility:visible;transition:opacity .4s ease}
+.mnav-links,.mnav-foot{width:32rem;margin:0 auto}
+.mnav-links{display:flex;flex-direction:column;border-top:1px solid rgba(255,255,255,.1)}
+/* пункт 64.5: номер на +22, слово на +15.3 и 46 от края */
+.mnav-links a{display:flex;align-items:flex-start;height:6.45rem;padding-top:1.53rem;border-bottom:1px solid rgba(255,255,255,.1);
+  font:400 3rem/.88 Inter,sans-serif;letter-spacing:-.06em;color:#fff;
+  opacity:0;transform:translateY(18px);transition:opacity .3s ease,transform .5s var(--out)}
+.mnav-links a i{width:2.6rem;flex:none;margin-top:.68rem;font:700 1.1rem/1 Manrope,sans-serif;font-style:normal;letter-spacing:0;color:var(--acc)}
+.mnav-links a:active{color:var(--acc)}
+html.is-menu .mnav-links a{opacity:1;transform:none;transition:opacity .5s ease,transform .8s var(--out)}
+html.is-menu .mnav-links a:nth-child(2){transition-delay:.05s}
+html.is-menu .mnav-links a:nth-child(3){transition-delay:.1s}
+html.is-menu .mnav-links a:nth-child(4){transition-delay:.15s}
+html.is-menu .mnav-links a:nth-child(5){transition-delay:.2s}
+.mnav-foot{margin-top:4.65rem}
+.pill.mnav-cta{width:100%;height:5.6rem;border-radius:2.8rem;background:var(--acc);color:#0a0a0a;font:500 1.4rem/1.35 "Inter Tight",sans-serif}
+.mnav .sq-soc{margin-top:7.8rem}
+
+/* квадраты соцсетей 73, шаг 82 (заявка и меню) */
+.sq-soc,.ap-soc div{display:flex;gap:.9rem}
+.sq-soc a,.ap-soc a{display:grid;place-items:center;width:7.3rem;height:7.3rem;border-radius:.8rem;background:rgba(255,255,255,.2);color:#fff;
+  transition:background-color .4s var(--out)}
+.sq-soc a:active,.ap-soc a:active{background:var(--acc)}
+.sq-soc svg,.ap-soc svg{fill:currentColor}
+.sq-soc svg[width="22"],.ap-soc svg[width="22"]{width:2.2rem;height:1.8rem}
+.sq-soc svg[width="21"],.ap-soc svg[width="21"]{width:2.1rem;height:2.1rem}
+.sq-soc svg[width="27"],.ap-soc svg[width="27"]{width:2.7rem;height:2.7rem}
+.sq-soc svg[width="23"],.ap-soc svg[width="23"]{width:2.3rem;height:2.3rem}
+
+/* ═════════ первый экран (y 0–740) ═════════ */
+.opening{position:relative}
+.stage{position:relative;height:74rem;min-height:0;background:#0a0a0a url(img/m/plate-hero.webp?v=1) 50% 0/36rem 74rem no-repeat}
+.stage-dim,.hero-bg,.nav,.soc-hero,.eyebrow,.rule{display:none}
+.frame{left:50%;top:0;width:36rem;height:74rem;margin:0 0 0 -18rem;transform:none}
+.eyebrow,.title,.script,.lead,.rule,.fact{translate:none}
+.logo{left:2rem;top:1.6rem;width:4.4rem;height:4.4rem}
+/* «Стать экспертом» 181×44: поля 18/20, текст Inter 14, самолётик через 10 */
+.btn{left:10.7rem;top:1.6rem;width:18.1rem;height:4.4rem;padding:0 2rem 0 1.8rem;gap:.85rem;justify-content:flex-start;
+  border-radius:2.2rem;font:400 1.4rem/1.35 Inter,sans-serif}
+.btn-ic,.btn-ic svg{width:1.7rem;height:1.7rem}
+.burger.abs{left:29.57rem;top:1.6rem}
+/* заголовок Inter 44 / 88 %, разрядка −6 %, три строки */
+.title{left:2rem;top:30.1rem;width:32rem;transform:none;font-size:4.4rem;line-height:.88;letter-spacing:-.06em;white-space:normal}
+/* «Практика в живую» — текст 322×42 (Gogol 35) на y 422 */
+.script{left:1.9rem;top:42.2rem;width:32.2rem;height:4.48rem}
+.lead{left:1.6rem;top:46.9rem;width:32.7rem;transform:none;font-size:1.5rem;line-height:1.35;color:rgba(255,255,255,.6)}
+/* факты: строки 44 между линиями 577, 621, 665, 709 */
+.fact{left:2rem!important;width:32rem!important;height:4.4rem;transform:none;flex-direction:row;justify-content:space-between;align-items:center;gap:1.2rem}
+.fact-1{top:57.7rem}.fact-2{top:62.1rem}.fact-3{top:66.5rem}
+.fact::after,.fact-1::before{content:"";position:absolute;left:0;right:0;height:1px;background:rgba(255,255,255,.1)}
+.fact::after{bottom:-1px}
+.fact-1::before{top:0}
+.fact small{flex:none;font-size:1.1rem;letter-spacing:.16em;color:rgba(255,255,255,.4)}
+.fact b{font-size:1.5rem;text-align:right}
+
+/* ═════════ О проекте (y 740–1468) ═════════ */
+.about{min-height:0}
+.ab-frame{left:auto;width:32rem;height:auto;margin:0 auto;padding:3.1rem 0 7.7rem;
+  display:grid;grid-template-columns:14.7rem 1fr}
+.ab-frame>*{position:relative;grid-column:1/-1}
+.ab-frame>.ab-ey{left:auto;top:auto}
+.ab-line,.ab-vl{display:none}
+.ab-text{left:auto;top:auto;width:auto;margin-top:1.2rem;font-size:2.3rem;line-height:1.1;letter-spacing:-.02em}
+.ab-mute{display:block;color:rgba(255,255,255,.4)}
+/* цифры 2×2: линии #2d2d2d на 1041 и 1240, вертикаль x 167 */
+.ab-f{grid-column:auto;left:auto!important;top:auto;height:19.9rem;margin-top:4.1rem;padding-top:1.4rem;border-top:1px solid #2d2d2d}
+.ab-f:nth-of-type(n+3){height:15.1rem;margin-top:0}
+.ab-f:nth-of-type(even){padding-left:3.1rem;border-left:1px solid rgba(255,255,255,.1)}
+.ab-f3{padding-top:1.8rem}
+.ab-f b{font:400 4.8rem/5.09rem Inter,sans-serif;letter-spacing:-.19rem}
+.ab-f .ab-n sup{left:calc(100% + .1rem);top:.43rem;font-size:1.5rem}
+.ab-f3 .ab-n sup{top:.45rem;font-size:2.4rem}
+.ab-f4 .ab-n sup{left:calc(100% + .2rem)}
+.ab-f p{position:static;width:12.3rem!important;margin-top:.81rem;font-size:1.3rem;line-height:1.35;color:rgba(255,255,255,.4)}
+.ab-f4 p{width:14.2rem!important}
+
+/* ═════════ ролик (y 1468–2080) ═════════ */
+.reel{height:61.2rem}
+/* в макете блок статичный: видео в своей секции, надпись по центру блока */
+.reel-card{position:absolute}
+.reel-bg{display:none}
+.reel-m{display:block;position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.reel-shade{background:#000;opacity:.3!important}
+.reel-copy{width:33.1rem;gap:.8rem}
+.reel-copy .ab-ey{padding-left:.24em}
+.reel-h{font-size:2.5rem;line-height:1.15;letter-spacing:-.02em}
+.reel-close{top:1.4rem;right:1.4rem;width:4.6rem;height:4.6rem}
+
+/* ═════════ Принцип (y 2080–3211) ═════════ */
+.sec{padding-top:4.4rem}
+.strike{padding:4.4rem 0 12rem;background:#0a0a0a url(img/m/plate-strike.webp?v=1) 50% 0/36rem auto no-repeat}
+.st-glow{display:none}
+.st-h{margin-top:.7rem;font-size:3rem;line-height:1.1;letter-spacing:-.02em}
+.st-list{margin-top:3.1rem}
+/* строка: линия, пункт на +15, «Вместо этого» на +60, описание на +82, до следующей линии 176 */
+.st-row{display:block;min-height:0;padding:1.5rem 0 3.4rem;border-top-color:rgba(255,255,255,.2)}
+.st-n{display:none}
+.st-no{width:calc(100% + 2.2rem);max-width:none;font-size:2.5rem;line-height:1.06;letter-spacing:-.02em;color:rgba(255,255,255,calc(1 - var(--p,0) * .6))}
+.st-row:nth-child(3) .st-no{font-size:2.2rem}
+.st-no span{background-position:0 62%;background-size:calc(var(--p,0) * 100%) 1px}
+.st-yes{max-width:none;padding-top:1.85rem;font-size:1.5rem;line-height:1.35;color:rgba(255,255,255,.9)}
+.st-yes small{margin-bottom:.7rem;font-size:1.1rem}
+
+/* фото интенсивов — в мобильном макете этого блока нет */
+.life{display:none}
+
+/* ═════════ Как проходит интенсив (y 3211–5380) ═════════ */
+.hw{padding:4.4rem 0 2.1rem;background:#0a0a0a url(img/m/plate-hw.webp?v=1) 50% 0/36rem auto no-repeat}
+.hw-glow{display:none}
+.hw-head{height:auto;width:31rem;margin:0 auto;padding-bottom:5.1rem}
+.hw-ey{padding-left:.24em;letter-spacing:.24em}
+.hw-h{position:static;margin-top:.6rem;font-size:3rem;line-height:1.1;letter-spacing:-.02em;white-space:normal}
+.hw-lead{position:static;width:auto;margin:1.4rem 0 0;color:rgba(255,255,255,.6)}
+.hw-stack{width:32rem}
+/* плашка 320×456, углы 8; фото 312×229 с отступом 4, углы 11/11/2/2; подложка — экспорт группы макета */
+.hw-card{position:sticky;top:8rem;height:auto;min-height:45.6rem;padding:25.5rem 1.4rem 2.4rem;border-radius:.8rem;
+  background:#141414 url(img/m/hw1-bg.webp?v=2) 0 0/100% 100% no-repeat;transform:scale(calc(1 - var(--t) * .06));filter:none}
+.hw-card:nth-of-type(4n+2){background-image:url(img/m/hw2-bg.webp?v=2)}
+.hw-card:nth-of-type(4n+3){background-image:url(img/m/hw3-bg.webp?v=2)}
+.hw-card:nth-of-type(4n+4){background-image:url(img/m/hw4-bg.webp?v=2)}
+.hw-card+.hw-card{margin-top:1.7rem;box-shadow:0 -1.2rem 3rem rgba(0,0,0,.45)}
+.hw-card::after{z-index:2;border-radius:inherit;opacity:calc(var(--t) * .6)}
+.hw-bg,.hw-mark,.hw-tail{display:none}
+.hw-ph{left:.4rem;top:.4rem;width:31.2rem;height:22.9rem;border-radius:1.1rem 1.1rem .2rem .2rem}
+.hw-num,.hw-card h3,.hw-card p{position:relative;left:auto;top:auto}
+.hw-num{display:block;letter-spacing:.06em}
+.hw-card h3{margin-top:.7rem;font-size:2.2rem;letter-spacing:-.02em;white-space:normal}
+.hw-card p{width:25.6rem!important;max-width:100%;margin-top:2.5rem;color:rgba(255,255,255,.6)}
+
+/* ═════════ Интенсивы (y 5380–6740) ═════════ */
+.intens{padding-top:4.5rem;background:url(img/m/plate-intens.webp?v=1) 50% 0/36rem auto no-repeat}
+.in-glow{display:none}
+.in-h{margin-top:.8rem;font-size:2.8rem;line-height:1.16;letter-spacing:-.02em}
+.in-h>span:not(.w){color:rgba(255,255,255,.5)}
+.in-sub{margin-top:1.7rem;font-size:1.5rem;color:rgba(255,255,255,.6)}
+.in-sub br{display:none}
+.in-list{margin-top:5.8rem;border-top:0}
+.in-row{border-bottom-color:rgba(255,255,255,.3)}
+/* строка: номер | название | кнопка 35; под названием на +56 — даты слева, цена справа */
+.in-head,.in-row:has(.in-t br) .in-head{grid-template-columns:2.2rem 1fr 3.5rem;grid-template-rows:auto auto;align-items:start;
+  min-height:0;padding:2.6rem 0 2.9rem}
+.in-list>.in-row:first-child .in-head{padding-top:0}
+.in-row.is-open .in-head,.in-row.is-open:has(.in-t br) .in-head{padding-bottom:0}
+.in-n,.in-row:has(.in-t br) .in-n{grid-column:1;grid-row:1;align-self:start;margin:0;font:600 2rem/1.06 "Inter Tight",sans-serif;letter-spacing:-.02em;color:var(--acc)}
+.in-row.is-open .in-n{color:var(--acc)}
+.in-t{grid-column:2;grid-row:1;padding-right:1rem;font-size:2rem;letter-spacing:-.02em;white-space:normal}
+.in-d,.in-p,.in-row:has(.in-t br) :is(.in-e,.in-p,.in-x){translate:none}
+.in-d{grid-column:2/4;grid-row:2;margin-top:1.4rem;font-size:1.5rem;white-space:nowrap}
+.in-d small{display:inline;margin:0 0 0 .3em;font-size:1.5rem;color:rgba(255,255,255,.5)}
+.in-d small::before{content:"• "}
+.in-e{display:none}
+.in-p{grid-column:2/4;grid-row:2;justify-self:end;margin:1.4rem 0 0;font-size:1.7rem;color:var(--acc)}
+.in-row.is-open .in-p{color:#fff}
+.in-x,.in-row:has(.in-t br) .in-x{grid-column:3;grid-row:1;align-self:start;width:3.5rem;height:3.5rem;min-width:0;min-height:0}
+.in-x::before,.in-x::after{width:1.1rem;min-width:0;height:.15rem}
+.in-row.is-open .in-x{background:var(--acc);border-color:var(--acc)}
+.in-row.is-open .in-x::before,.in-row.is-open .in-x::after{background:#0a0a0a}
+.in-row:not(.is-open) .in-head:hover .in-t{transform:none}
+.in-body-in{grid-template-columns:1fr;grid-template-rows:none}
+.in-ph,.in-c1,.in-c2,.pill.in-cta{grid-column:1;grid-row:auto}
+.in-ph{width:100%;aspect-ratio:320/194;margin-top:2.4rem}
+.in-col{margin-top:2rem}
+.in-c1{padding-right:0}
+.in-c2{margin-top:2.3rem}
+.in-col small{margin-bottom:.4rem;font-size:1.2rem;color:rgba(255,255,255,.3)}
+.in-col li{padding-left:1.35em;font-size:1.5rem}
+.in-col p{max-width:none;margin:0;font-size:1.5rem;color:rgba(255,255,255,.6)}
+.pill.in-cta{height:4.6rem;margin:3.3rem 0 4.4rem;border-radius:3rem;font-size:1.5rem}
+
+/* ═════════ Эксперты (y 6740–8000) ═════════ */
+.experts{padding:4.4rem 0 1rem;background:url(img/m/plate-experts.webp?v=1) 50% 0/36rem auto no-repeat}
+.ex-h{width:32.7rem;max-width:none;margin-top:.8rem;font-size:2.6rem;line-height:1.16;letter-spacing:-.02em}
+.ex-sub{display:none}
+.ex-grid{flex-direction:column;height:auto;gap:.6rem;margin-top:3rem}
+/* карточка 320: фото, затемнение и блюр — экспорт группы макета (img/m/ex-*.webp), под ним фон #0a0a0a */
+.ex,.ex:hover,.ex:focus-within{flex:none;overflow:visible;border-radius:.8rem;background:#0a0a0a 0 0/100% auto no-repeat}
+.ex--mordvov{background-image:url(img/m/ex-mordvov.webp?v=1)}
+.ex--koltsov{background-image:url(img/m/ex-koltsov.webp?v=2)}
+.ex .ex-ph,.ex-bz,.ex::before,.ex::after{display:none}
+.ex--x .ex-ph{display:block;position:absolute;inset:0 0 auto;height:49.6rem;transform:none}
+.ex-tx{position:relative;left:auto;right:auto;bottom:auto;padding:22.5rem 1.1rem 4.2rem 1rem}
+.ex-role{margin-bottom:.6rem;font-size:1rem;letter-spacing:.21em;color:rgba(255,255,255,.4);white-space:normal}
+.ex h3{font-size:2.4rem;letter-spacing:-.02em;white-space:normal}
+.ex-fw,.ex:hover .ex-fw,.ex:focus-within .ex-fw{grid-template-rows:1fr;margin-top:2.8rem}
+.ex-facts{width:auto;overflow:visible}
+/* строки фактов: линия, текст на +10; год 15 золотом с x 34, текст с x 104 */
+.ex-facts li,.ex-facts li:last-child{opacity:1;transform:none;width:29.9rem;grid-template-columns:7rem 25.6rem;align-items:start;min-height:0;
+  padding:1rem 0 1.2rem .4rem;border-top-color:rgba(255,255,255,.2);border-bottom:0;font-size:1.5rem;color:rgba(255,255,255,.64)}
+.ex-facts li:last-child{padding-bottom:0}
+.ex-facts b{padding-right:1rem;font-weight:500;color:var(--acc)}
+
+/* ═════════ География (y 8000–8930) ═════════ */
+.geo{padding:4.5rem 0 3.2rem}
+/* свечение Dusk_1 4 поверх карты: в макете режим screen, здесь — та же картинка с прозрачностью (screen дорог на телефоне) */
+.geo::after{content:"";position:absolute;left:50%;top:0;z-index:1;width:36rem;height:93rem;margin-left:-18rem;pointer-events:none;
+  background:url(img/m/plate-geo.webp?v=2) 0 0/100% auto no-repeat}
+.geo-glow{display:none}
+.geo-h{max-width:none;margin-top:.8rem;font-size:2.6rem;line-height:1.16;letter-spacing:-.02em}
+.geo-lead{max-width:none;margin-top:1.5rem;font-size:1.5rem;color:rgba(255,255,255,.5)}
+/* карта — тот же холст 1013×476, что на компьютере, в масштабе 814/1013; фрейм от x −35, y 8162 */
+.geo-stage{height:auto;margin-top:-3.3rem}
+.geo-map{position:relative;left:-5.5rem;transform:scale(.80355)!important;transform-origin:0 0;margin-bottom:calc(47.6rem * (.80355 - 1) - 5.45rem)}
+/* цифры: линии 313 на 8490 / 8626 / 8762, число 53 на +10, приписка на +17 и через 9, подпись на +73 */
+.geo-figs{position:relative;left:auto;top:auto;width:31.3rem}
+.geo-f{height:13.6rem;border-top-color:rgba(255,255,255,.1)}
+.geo-f b{gap:.9rem;margin-top:1rem;font-size:5.3rem;letter-spacing:-.02em}
+.geo-f sup{margin-top:.7rem;font-size:1.3rem}
+.geo-f p{max-width:28.6rem;margin:.7rem 0 0;font-size:1.5rem;color:rgba(255,255,255,.4)}
+.geo-f:last-child{height:auto}
+
+/* бегущей строки в мобильном макете нет */
+.mq{display:none}
+
+/* ═════════ Отзывы (y 8930–9640) ═════════ */
+.reviews{padding:4.4rem 0 10.1rem}
+.rv-top{display:block;margin-bottom:3.6rem}
+.rv-top .in-h{margin-top:.6rem;font-size:2.7rem;line-height:1.16;letter-spacing:-.02em}
+.rv-ctl{display:none}
+.rv-strip{scroll-snap-type:x mandatory;scroll-padding:0 max(2rem,calc((100vw - 32rem) / 2))}
+.rv-strip.is-glide{scroll-snap-type:none}
+.rv-track{gap:1.7rem;padding:0 max(2rem,calc((100vw - 32rem) / 2))}
+/* карточка 274×475, углы 7: обложка, #000 37 %, снизу градиент #0a0a0a 64 % */
+.rv{width:27.4rem;height:47.5rem;border-radius:.7rem;scroll-snap-align:start}
+.rv img,.rv:hover img{filter:none}
+.rv::after{background:linear-gradient(0deg,rgba(10,10,10,.64) 1.5%,rgba(10,10,10,0) 49%),rgba(0,0,0,.37)}
+.rv-play,.rv:hover .rv-play{width:8.3rem;height:8.3rem;margin:-4.15rem 0 0 -4.15rem;background:#fff;-webkit-backdrop-filter:none;backdrop-filter:none;scale:1}
+.rv-play svg{width:1.21rem;height:1.4rem;margin-left:.3rem;fill:#0a0a0a}
+.rv-tx{left:1.7rem;right:2.4rem;bottom:1.9rem}
+.rv-q{font-size:2rem;line-height:1.15;letter-spacing:0}
+
+/* ═════════ Заявка (y 9640–10663) ═════════ */
+.apply{margin-top:0;padding:4.7rem 0 6.7rem;border-top:0;background:#0a0a0a url(img/m/plate-apply.webp?v=1) 50% 0/36rem auto no-repeat}
+.ap{display:flex;flex-direction:column;gap:0}
+.ap-l{display:contents}
+.ap-h{margin-top:.7rem;font-size:2.9rem;line-height:1.16;letter-spacing:-.02em}
+.ap-note{max-width:32.7rem;margin-top:1rem;font-size:1.5rem;color:rgba(255,255,255,.5)}
+.ap-form{padding-top:0;margin-top:3.6rem}
+.ap-pick{display:flex;flex-direction:column;gap:.7rem;margin:0 0 5.1rem}
+.ap-pick legend{margin-bottom:1rem;font-size:1.2rem;color:rgba(255,255,255,.4)}
+.ap-pick span{min-height:5rem;padding:1rem 1.6rem;border-color:rgba(255,255,255,.2);white-space:normal;font-size:1.5rem;color:rgba(255,255,255,.64)}
+/* поле: текст 17 сверху, линия на +36, следующее поле через 26 */
+.ap-f{padding:0 0 1.3rem;border-bottom-color:rgba(255,255,255,.2)}
+.ap-f+.ap-f{margin-top:2.6rem}
+.ap-f input,.ap-f textarea,.ap-cc,.ap-f>span:last-child{font-size:1.7rem}
+.ap-f input{height:2.3rem}
+.ap-f>span:last-child{top:0;color:rgba(255,255,255,.3)}
+.ap-f input::placeholder{color:rgba(255,255,255,.3)}
+.ap-cc svg{width:1.8rem;height:1.3rem;margin-right:.8rem}
+.ap-cc{padding-right:0}
+.ap-cc i{margin-right:.8rem;border-left-width:.4rem;border-right-width:.4rem;border-top-width:.5rem}
+.ap-opt,.ap-chk{margin-top:2.6rem}
+.ap-send{margin-top:3.9rem}
+.ap-btn{height:5.1rem;border-radius:5.7rem;font-size:1.7rem}
+.ap-send p{margin:1.7rem 0 0;white-space:normal;font-size:1.3rem;color:rgba(255,255,255,.4)}
+.ap-soc{order:3;margin-top:0;padding-top:9.5rem}
+.ap-soc p{margin-bottom:1.8rem;font-size:1.5rem;color:rgba(255,255,255,.6)}
+.ap-ok b{font-size:3.2rem}
+.ap-ok p{font-size:1.5rem}
+
+/* ═════════ Подвал (y 10663–11477) ═════════ */
+.foot{padding:3.6rem 0 3.2rem;background:#0b0b0a url(img/m/plate-foot.webp?v=1) 50% 0/36rem auto no-repeat}
+.ft-m{display:flex;flex-direction:column;align-items:center;width:36rem;margin:0 auto;text-align:center}
+.ft-m-logo{width:5.4rem;height:5.4rem}
+.ft-m-slogan{max-width:31.9rem;text-wrap:balance;margin-top:1.5rem;font:400 2.9rem/1.08 "Inter Tight",sans-serif;letter-spacing:-.02em;color:var(--acc)}
+.ft-m-c{margin-top:4.1rem}
+.ft-m-slogan+.ft-m-c,.ft-m-logo+.ft-m-c{margin-top:5.1rem}
+.ft-m-c small{display:block;font:400 1.4rem/1.3 Manrope,sans-serif;letter-spacing:.09em;text-transform:uppercase;color:rgba(255,255,255,.4)}
+.ft-m-c>a{display:inline-block;margin-top:.7rem;font:600 2.7rem/1.19 Manrope,sans-serif;letter-spacing:-.02em;color:#fff;
+  text-decoration:underline;text-decoration-thickness:1px;text-underline-offset:.2em}
+.ft-m-soc{display:flex;justify-content:center;gap:.7rem;margin-top:1.3rem}
+.ft-m-soc a{display:grid;place-items:center;width:5.8rem;height:5.8rem;border-radius:50%;background:rgba(255,255,255,.2);color:#fff;transition:background-color .4s var(--out)}
+.ft-m-soc a:active{background:var(--acc)}
+.ft-m-soc svg{fill:currentColor}
+.ft-m-soc svg[viewBox^="3.6"]{width:2.2rem;height:2.2rem}
+.ft-m-soc svg[viewBox^="4 "]{width:1.9rem;height:1.9rem}
+.ft-m-soc svg[width="22"]{width:1.92rem;height:1.57rem}
+/* реквизиты: линия на всю ширину кадра на 11290, текст Manrope 15, 45 % */
+.ft-m-legal{align-self:stretch;margin-top:8.9rem;padding:1.5rem 2rem 0;border-top:1px solid rgba(255,255,255,.2);text-align:left;
+  font:500 1.5rem/1.35 Manrope,sans-serif;color:rgba(255,255,255,.45)}
+.ft-m-legal p{margin:0}
+.ft-m-docs{margin-top:4.05rem!important}
+.ft-m-docs a{text-decoration:underline;text-decoration-thickness:1px;text-underline-offset:.15em}
+
+/* планшет: колонка 360 кадра по центру — края фона первого экрана растворяются в #0a0a0a */
+@media (min-width:600px){
+  .stage{background:linear-gradient(90deg,#0a0a0a,rgba(10,10,10,0) 12%,rgba(10,10,10,0) 88%,#0a0a0a) 50% 0/36rem 74rem no-repeat,
+    #0a0a0a url(img/m/plate-hero.webp?v=1) 50% 0/36rem 74rem no-repeat}
+}
