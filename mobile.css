@@ -52,6 +52,7 @@ html.is-menu .mnav-links a:nth-child(2){transition-delay:.05s}
 html.is-menu .mnav-links a:nth-child(3){transition-delay:.1s}
 html.is-menu .mnav-links a:nth-child(4){transition-delay:.15s}
 html.is-menu .mnav-links a:nth-child(5){transition-delay:.2s}
+html.is-menu .mnav-links a:nth-child(6){transition-delay:.25s}
 .mnav-foot{margin-top:4.65rem}
 .pill.mnav-cta{width:100%;height:5.6rem;border-radius:2.8rem;background:var(--acc);color:#0a0a0a;font:500 1.4rem/1.35 "Inter Tight",sans-serif}
 .mnav .sq-soc{margin-top:7.8rem}
@@ -207,6 +208,84 @@ html.is-menu .mnav-links a:nth-child(5){transition-delay:.2s}
 .in-col p{max-width:none;margin:0;font-size:1.5rem;color:rgba(255,255,255,.6)}
 .pill.in-cta{height:4.6rem;margin:3.3rem 0 4.4rem;border-radius:3rem;font-size:1.5rem}
 
+/* ═════════ Для компаний (после интенсивов) ═════════
+   Одна колонка: надзаголовок, заголовок, подводка, фото (горизонтальный кадр из того же снимка), шаги;
+   ниже темы — галочка слева, под названием дни и цена; смета и заявка под темами.
+   Пока листают темы, а смета ещё ниже, — внизу экрана панель с итогом и кнопкой «К заявке» */
+.corp{padding-top:8.4rem}
+.co-top{display:flex;flex-direction:column;gap:0}
+.co-intro{display:contents}
+.co-top .in-ey{order:1}
+.co-h{order:2;max-width:none;font-size:2.6rem}
+.co-lead{order:3;max-width:none}
+.co-ph{order:4;min-height:0;aspect-ratio:320/236;margin-top:2.6rem;border-radius:.8rem}
+.co-ph video{object-position:50% 38%}
+.co-watch{gap:1.2rem;padding:1.6rem}
+.co-watch-ic{width:4.8rem;height:4.8rem;min-width:0;min-height:0}
+.co-watch-ic svg{width:.95rem;height:1.1rem;min-width:0;min-height:0}
+.co-watch-tx b{font-size:1.6rem}
+.co-watch-tx small{font-size:1.25rem}
+.co-how{order:5;margin-top:3.4rem}
+.co-cap{margin-bottom:1.2rem;font-size:1.2rem;color:rgba(255,255,255,.4)}
+.co-steps{border-top-color:rgba(255,255,255,.3)}
+.co-step{grid-template-columns:3.4rem minmax(0,1fr);align-items:baseline;padding:1.6rem 0 1.7rem;border-bottom-color:rgba(255,255,255,.16)}
+.co-sn{grid-row:1/span 2;font-size:1.3rem}
+.co-step b{padding-right:0;font-size:1.7rem;letter-spacing:-.02em}
+.co-step p{grid-column:2;margin-top:.5rem;font-size:1.4rem;color:rgba(255,255,255,.58)}
+
+.co-form{display:flex;flex-direction:column;gap:0;margin-top:5.6rem}
+.co-legend{display:none}
+.co-dir+.co-dir{margin-top:4.4rem}
+.co-dir-h{grid-template-columns:minmax(0,1fr);padding-bottom:.8rem}
+.co-dir-t{font-size:2.4rem;letter-spacing:-.02em}
+.co-dir-for{max-width:none;margin-top:.8rem;font-size:1.4rem;color:rgba(255,255,255,.55)}
+.co-g{grid-column:1;grid-row:auto;justify-self:start;height:3.2rem;margin-top:1.4rem;padding:0 1.3rem 0 1.1rem;font-size:1.3rem}
+.co-g svg{width:1.6rem;height:1.2rem;min-width:0;min-height:0}
+.co-row{grid-template-columns:4.4rem minmax(0,1fr) auto;grid-template-rows:auto auto;align-items:start;min-height:0;padding:1.6rem 0 1.5rem;border-bottom-color:rgba(255,255,255,.16)}
+.co-ck{grid-row:1/span 2;width:2.8rem;height:2.8rem;min-width:0;min-height:0;margin-top:-.15rem}
+.co-ck::before,.co-ck::after{width:1rem;min-width:0;height:.15rem}
+.co-t{grid-column:2/4;padding-right:0;font-size:1.7rem;line-height:1.25;letter-spacing:-.02em}
+.co-row:hover .co-t{transform:none}
+.co-row:hover::before{opacity:0}
+.co-row:has(input:checked)::before{opacity:1}
+.co-d{grid-column:2;grid-row:2;margin-top:.7rem;font-size:1.4rem}
+.co-p{grid-column:3;grid-row:2;margin-top:.7rem;font-size:1.5rem}
+
+.co-sum{position:relative;top:auto;margin-top:3.6rem}
+.co-sum-in{padding:2.6rem 2rem 2.4rem;border-radius:1rem}
+.co-sum-ey{font-size:1.1rem;letter-spacing:.24em}
+.co-sum-n{min-height:0;margin-top:1.6rem;font-size:1.6rem}
+.co-sum-n.is-empty{font-size:1.4rem;line-height:1.4}
+.co-total{margin-top:.6rem}
+.co-v{font-size:5rem;letter-spacing:-.1rem}
+.co-total sup{margin-top:.6rem;font-size:1.6rem}
+.co-calc{font-size:1.3rem}
+.co-sale{gap:1rem;margin-top:2rem;font-size:1.4rem}
+.co-sale i{width:3rem;height:3rem;min-width:0;min-height:0;font-size:1.3rem}
+.co-fields{margin-top:2.6rem}
+.co-fields .ap-f{padding:0 0 1.3rem}
+.co-fields .ap-f>span:last-child{top:0}
+.co-fields .ap-f input,.co-fields .ap-cc,.co-fields .ap-f>span:last-child{font-size:1.7rem}
+.co-fields .ap-f input{height:2.3rem}
+.co-sum .ap-agree{margin:2.4rem 0 1.8rem}
+.pill.co-btn{height:5.1rem;font-size:1.6rem}
+.co-tel{font-size:1.3rem}
+.co-ok{padding:2.6rem 2rem}
+.co-ok b{font-size:2.8rem}
+.co-ok p{font-size:1.5rem}
+
+/* панель итога: появляется, когда отмечена хотя бы одна тема, темы на экране, а смета ещё ниже (blocks.js) */
+.co-bar{display:flex;align-items:center;gap:1.2rem;position:fixed;left:1.2rem;right:1.2rem;bottom:calc(1.2rem + env(safe-area-inset-bottom,0px));z-index:45;
+  padding:1rem 1rem 1rem 1.8rem;border:1px solid rgba(255,255,255,.1);border-radius:1.4rem;background:rgba(17,16,15,.97);box-shadow:0 1rem 3rem rgba(0,0,0,.5);
+  transform:translateY(calc(100% + 3rem));visibility:hidden;transition:transform .5s var(--out),visibility 0s .5s}
+.co-bar.is-on{transform:none;visibility:visible;transition:transform .5s var(--out)}
+.co-bar p{flex:1;min-width:0;margin:0;display:flex;flex-direction:column}
+.co-bar-v{font:500 1.9rem/1.2 "Inter Tight",sans-serif;color:#fff;white-space:nowrap;font-variant-numeric:tabular-nums}
+.co-bar-n{margin-top:.2rem;font-size:1.25rem;line-height:1.3;color:rgba(255,255,255,.55);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.co-bar-go{flex:none;height:4.4rem;padding:0 1.8rem;border:0;border-radius:3rem;background:var(--acc);color:#0a0a0a;
+  font:500 1.4rem/1 "Inter Tight",sans-serif;cursor:pointer;-webkit-tap-highlight-color:transparent}
+.co-bar-go:active{background:#dcb27a}
+
 /* ═════════ Эксперты (y 6740–8000) ═════════ */
 .experts{padding:4.4rem 0 1rem;background:url(img/m/plate-experts.webp?v=1) 50% 0/36rem auto no-repeat}
 .ex-h{width:32.7rem;max-width:none;margin-top:.8rem;font-size:2.6rem;line-height:1.16;letter-spacing:-.02em}
@@ -269,7 +348,7 @@ html.is-menu .mnav-links a:nth-child(5){transition-delay:.2s}
 .rv-q{font-size:2rem;line-height:1.15;letter-spacing:0}
 
 /* ═════════ Заявка (y 9640–10663) ═════════ */
-.apply{margin-top:0;padding:4.7rem 0 6.7rem;border-top:0;background:#0a0a0a url(img/m/plate-apply.webp?v=1) 50% 0/36rem auto no-repeat}
+.apply{margin-top:0;padding:4.7rem 0 9rem;border-top:0;background:#0a0a0a url(img/m/plate-apply.webp?v=1) 50% 0/36rem auto no-repeat}
 .ap{display:flex;flex-direction:column;gap:0}
 .ap-l{display:contents}
 .ap-h{margin-top:.7rem;font-size:2.9rem;line-height:1.16;letter-spacing:-.02em}
@@ -289,10 +368,12 @@ html.is-menu .mnav-links a:nth-child(5){transition-delay:.2s}
 .ap-cc{padding-right:0}
 .ap-cc i{margin-right:.8rem;border-left-width:.4rem;border-right-width:.4rem;border-top-width:.5rem}
 .ap-opt,.ap-chk{margin-top:2.6rem}
-.ap-send{margin-top:3.9rem}
+.ap-send{margin-top:2.4rem}
 .ap-btn{height:5.1rem;border-radius:5.7rem;font-size:1.7rem}
 .ap-send p{margin:1.7rem 0 0;white-space:normal;font-size:1.3rem;color:rgba(255,255,255,.4)}
-.ap-soc{order:3;margin-top:0;padding-top:9.5rem}
+.ap-agree{align-items:flex-start;gap:1rem;margin:0 0 1.8rem;font-size:1.3rem;letter-spacing:-.01em;color:rgba(255,255,255,.45)}
+.ap-agree i{width:1.8rem;height:1.8rem;margin-top:calc((1.4em - 1.8rem) / 2)}
+.ap-soc{order:3;margin-top:0;padding-top:6.4rem}
 .ap-soc p{margin-bottom:1.8rem;font-size:1.5rem;color:rgba(255,255,255,.6)}
 .ap-ok b{font-size:3.2rem}
 .ap-ok p{font-size:1.5rem}
@@ -326,3 +407,8 @@ html.is-menu .mnav-links a:nth-child(5){transition-delay:.2s}
   .stage{background:linear-gradient(90deg,#0a0a0a,rgba(10,10,10,0) 12%,rgba(10,10,10,0) 88%,#0a0a0a) 50% 0/36rem 74rem no-repeat,
     #0a0a0a url(img/m/plate-hero.webp?v=1) 50% 0/36rem 74rem no-repeat}
 }
+
+/* плашка cookies на телефоне: во всю ширину с полями 16 px, кнопка под текстом */
+.ck{left:16px;right:16px;bottom:16px;max-width:none;flex-direction:column;align-items:stretch;gap:1.4rem;padding:1.8rem;border-radius:1.8rem}
+.ck p{font-size:1.35rem}
+.ck-ok{height:4.4rem;font-size:1.5rem}

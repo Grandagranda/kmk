@@ -69,7 +69,7 @@
     io.unobserve(e.target);
     if (e.target._onIn) e.target._onIn();
   }), { rootMargin: '0px 0px -12% 0px' });
-  $$('[data-reveal],.reviews,.apply').forEach(el => io.observe(el));
+  $$('[data-reveal],.reviews,.apply,.co-ph').forEach(el => io.observe(el));
 
   // зачёркивания идут прямо за прокруткой, без таймеров: у каждой строки свой отрезок пути --p 0→1 —
   // линия начинает тянуться, когда верх строки поднялся до 68 % высоты окна, и дочерчена к 38 %.
@@ -342,6 +342,17 @@
   // короткий яркий впереди, длинные тусклые позади. Хвост целиком уходит в Петербург ──
   const PULSE = [[120, .16], [64, .32], [30, .6], [11, 1]];
   const geoPulses = geo && $('.geo-pulses', geo);
+  // импульсы — в своём SVG поверх карты, на своём слое: иначе каждый их кадр перерисовывал всю карту вместе
+  // с ~80 светящимися точками (у каждой фильтр из четырёх теней), и прокрутка мимо карты подлагивала
+  if (geoPulses && !geoStill) {
+    const ov = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+    ov.setAttribute('viewBox', geoSvg.getAttribute('viewBox'));
+    if (geoSvg.getAttribute('preserveAspectRatio')) ov.setAttribute('preserveAspectRatio', geoSvg.getAttribute('preserveAspectRatio'));
+    ov.setAttribute('class', 'geo-svg geo-ov');
+    ov.setAttribute('aria-hidden', 'true');
+    ov.appendChild(geoPulses);
+    geoSvg.after(ov);
+  }
   let pulseOn = false, pulseSeen = false, pulseT = 0, pulseLast = -1;
   function geoPulseStart() {
     if (pulseOn || reduced || !geoPulses || !geoArcs.length || !geoPulses.animate) return;
@@ -469,6 +480,14 @@
       if (!inTouched) setOpen(rows[0]);
     }, { rootMargin: '0px 0px -30% 0px' });
     ioIn.observe(inList);
+    // ссылка на блок ниже списка («Компаниям», «Эксперты», «Записаться»…): по пути первый пункт сам не раскрываем —
+    // раскрытие сдвигает всё ниже на высоту пункта, и плавная прокрутка приезжала на 360–560 px выше начала блока
+    document.addEventListener('click', e => {
+      const a = e.target.closest('a[href^="#"]');
+      if (!a || inTouched || a.getAttribute('href').length < 2) return;
+      const t = document.getElementById(a.getAttribute('href').slice(1));
+      if (t && t.getBoundingClientRect().top >= inList.getBoundingClientRect().bottom - 2) inTouched = true;
+    }, true);
   }
 
   // ── отзывы: перетаскивание, стрелки, счётчик, видео в окне ──
@@ -634,7 +653,8 @@
     const box = $$('.ap-int input').find(i => i.value === a.dataset.pick);
     if (box) box.checked = true;
   }));
-  const form = $('.ap-form');
+  // формы: заявка внизу страницы и смета «Для компаний» — маска телефона, проверка и отправка общие
+  const forms = $$('.ap-form, .co-form');
   // поле почты: пусто — можно (если не обязательное), заполнено — должно быть похоже на адрес
   const badMail = v => v && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v);
   // телефон: код страны стоит перед полем (Россия и Казахстан +7 — 10 цифр (000) 000 00 00, Беларусь +375 — 9 цифр
@@ -664,14 +684,14 @@
     box.classList.remove('is-bad');
     inp.focus();
   }));
-  if (form) form.addEventListener('input', e => {
+  forms.forEach(form => form.addEventListener('input', e => {
     // при стирании маску не навязываем — только срезаем хвостовые скобки и пробелы, иначе «)» не стереть
     const t = e.target;
     if (t.dataset.cc) t.value = /^delete/.test(e.inputType || '') ? t.value.replace(/\D+$/, '') : telMask(t.value, t);
-    const f = e.target.closest('.ap-f,.ap-opt,.ap-chk');
+    const f = e.target.closest('.ap-f,.ap-opt,.ap-chk,.ap-agree');
     if (f) f.classList.remove('is-bad');
-  });
-  if (form) form.addEventListener('submit', e => {
+  }));
+  forms.forEach(form => form.addEventListener('submit', e => {
     e.preventDefault();
     let ok = true;
     $$('.ap-f', form).forEach(f => {
@@ -682,7 +702,7 @@
       if (bad) ok = false;
     });
     // выбор варианта и галочка: обязательные — хотя бы что-то отмечено
-    $$('.ap-opt[data-req],.ap-chk[data-req]', form).forEach(f => {
+    $$('.ap-opt[data-req],.ap-chk[data-req],.ap-agree', form).forEach(f => {
       const bad = !$('input:checked', f);
       f.classList.toggle('is-bad', bad);
       if (bad) ok = false;
@@ -692,6 +712,7 @@
     // заявку принимает send.php и рассылает туда, куда указано в админке (почта, Telegram, CRM)
     const data = new FormData(form);
     $$('[data-cc]', form).forEach(i => { if (i.value.trim()) data.set(i.name, i.dataset.cc + ' ' + i.value.trim()); });
+    if (form._data) form._data(data);
     data.append('t', Math.round((performance.now() - formT0) / 1000));
     form.classList.remove('is-err');
     form.classList.add('is-busy');
@@ -700,10 +721,147 @@
       .then(res => {
         if (!res || !res.ok) return Promise.reject();
         form.classList.add('is-sent');
-        if (window.ym && window.KMK_YM) window.ym(window.KMK_YM, 'reachGoal', 'lead');
+        // цель Метрики «lead» — любая заявка; «lead_corp» — отдельно заявки компаний
+        if (window.ym && window.KMK_YM) {
+          window.ym(window.KMK_YM, 'reachGoal', 'lead');
+          if (form.classList.contains('co-form')) window.ym(window.KMK_YM, 'reachGoal', 'lead_corp');
+        }
+        if (form._sent) form._sent();
       })
       .catch(() => form.classList.add('is-err'))
       .finally(() => form.classList.remove('is-busy'));
-  });
+  }));
   const formT0 = performance.now();
+
+  // ── для компаний: темы галочками → дни, стоимость, скидка от двух тем. Итог «бежит» к новому
+  // значению. На телефоне, пока листают темы, а смета ещё ниже, внизу экрана — панель с итогом ──
+  const co = $('.co-form');
+  if (co) {
+    const NB = ' ';
+    const day = +co.dataset.day || 0, d2 = +co.dataset.d2 || 0, d3 = +co.dataset.d3 || d2;
+    const boxes = $$('.co-row input', co);
+    const fmt = n => String(Math.round(n)).replace(/\B(?=(\d{3})+(?!\d))/g, NB);
+    const pl = (n, f) => f[n % 10 === 1 && n % 100 !== 11 ? 0 : n % 10 >= 2 && n % 10 <= 4 && (n % 100 < 10 || n % 100 >= 20) ? 1 : 2];
+    const TEM = ['тема', 'темы', 'тем'], DNI = ['день', 'дня', 'дней'];
+    const elN = $('.co-sum-n', co), elV = $('.co-v', co), elCalc = $('.co-calc', co), elSale = $('.co-sale', co), elSaleTx = $('.co-sale span', co);
+    // тексты пустой сметы — из шаблона, их и возвращаем, когда галочки сняли
+    const empty = { n: elN.innerHTML, calc: elCalc.innerHTML, sale: elSaleTx.innerHTML };
+    const state = () => {
+      const on = boxes.filter(b => b.checked);
+      const n = on.length, days = on.reduce((a, b) => a + (+b.dataset.days || 0), 0);
+      const base = days * day, pct = n >= 3 ? d3 : n >= 2 ? d2 : 0;
+      return { on, n, days, base, pct, total: Math.round(base * (1 - pct / 100)) };
+    };
+    const label = s => s.n + NB + pl(s.n, TEM) + ' · ' + s.days + NB + pl(s.days, DNI);
+
+    let shown = day, raf = 0;
+    const run = to => {
+      cancelAnimationFrame(raf);
+      if (reduced) { shown = to; elV.textContent = fmt(to); return; }
+      const from = shown, t0 = performance.now(), T = 650;
+      const step = now => {
+        const k = Math.min(1, (now - t0) / T);
+        shown = from + (to - from) * (1 - Math.pow(1 - k, 3));
+        elV.textContent = fmt(k < 1 ? Math.round(shown / 1000) * 1000 : to);
+        if (k < 1) raf = requestAnimationFrame(step);
+      };
+      raf = requestAnimationFrame(step);
+    };
+
+    // панель итога на телефоне
+    const cbar = $('.co-bar'), sum = $('.co-sum', co), list = $('.co-list', co);
+    let listIn = false, sumIn = false;
+    const barCheck = () => {
+      if (!cbar) return;
+      const on = isMob() && listIn && !sumIn && boxes.some(b => b.checked) && !co.classList.contains('is-sent');
+      // плашка про cookies ещё не закрыта — панель встаёт над ней
+      const ck = $('.ck.is-on');
+      cbar.style.bottom = on && ck ? Math.round(innerHeight - ck.getBoundingClientRect().top + 8) + 'px' : '';
+      cbar.classList.toggle('is-on', on);
+    };
+    if (cbar) {
+      new IntersectionObserver(([e]) => { listIn = e.isIntersecting; barCheck(); }).observe(list);
+      // смета «на экране», когда её верх поднялся выше 70 % высоты окна
+      new IntersectionObserver(([e]) => { sumIn = e.isIntersecting; barCheck(); }, { rootMargin: '0px 0px -30% 0px' }).observe(sum);
+      mob.addEventListener('change', barCheck);
+      $('.co-bar-go', cbar).addEventListener('click', () => {
+        const y = sum.getBoundingClientRect().top + scrollY - (bar ? bar.offsetHeight : 0) - 16;
+        if (window.kmkScroll && window.kmkScroll.to) window.kmkScroll.to(y); else scrollTo({ top: y, behavior: 'smooth' });
+      });
+      const ckOk = $('.ck-ok');
+      if (ckOk) ckOk.addEventListener('click', () => setTimeout(barCheck, 60));
+    }
+
+    const paint = () => {
+      const s = state();
+      elN.classList.toggle('is-empty', !s.n);
+      elN.innerHTML = s.n ? label(s) : empty.n;
+      run(s.n ? s.total : day);
+      elCalc.innerHTML = !s.n ? empty.calc
+        : s.pct ? `<s>${fmt(s.base)}${NB}₽</s> · скидка ${s.pct}${NB}%`
+        : `${s.days}${NB}${pl(s.days, DNI)} × ${fmt(day)}${NB}₽`;
+      elSale.classList.toggle('is-on', s.n >= 2);
+      elSaleTx.innerHTML = s.n >= 2
+        ? (s.pct ? `Скидка ${s.pct}${NB}% за${NB}${s.n}${NB}${pl(s.n, TEM)} уже в${NB}итоге` : `Скидка за${NB}комплекс${NB}— назовём на${NB}созвоне`)
+        : s.n === 1 ? `Ещё одна тема${NB}— и${NB}будет скидка` : empty.sale;
+      if (cbar) {
+        $('.co-bar-v', cbar).textContent = fmt(s.total) + NB + '₽';
+        $('.co-bar-n', cbar).textContent = s.n ? label(s) : '';
+      }
+      barCheck();
+    };
+    co.addEventListener('change', e => { if (e.target.closest('.co-row')) paint(); });
+
+    // в заявку: пометка «для компании», выбранные темы (value галочек — «тема — 2 дня») и итог
+    co._data = data => {
+      const s = state();
+      data.delete('i[]');
+      data.append('i[]', 'Обучение для компании');
+      s.on.forEach(b => data.append('i[]', b.value));
+      data.append('i[]', s.n
+        ? `Итого: ${label(s)} · ${fmt(s.total)} ₽${s.pct ? ` со скидкой ${s.pct} %` : s.n >= 2 ? ' до скидки' : ''}`.replace(/ /g, ' ')
+        : 'Темы не выбраны — подобрать на созвоне');
+    };
+    co._sent = barCheck;
+    paint();
+  }
+
+  // ── «Для компаний»: видео с интенсива. Немая петля грузится, когда блок подъезжает к окну, и играет, только пока
+  // видна. Нажатие — весь ролик со звуком в окне видеоотзывов; пока оно открыто, петля стоит ──
+  const coVid = $('.co-vid'), coWatch = $('.co-watch');
+  if (coVid) {
+    let seen = false;
+    const kv = $('.kv-modal');
+    const playIf = () => { if (seen && !reduced && !(kv && kv.classList.contains('is-open'))) coVid.play().catch(() => {}); };
+    new IntersectionObserver(([e]) => {
+      seen = e.isIntersecting;
+      if (seen && !coVid.getAttribute('src')) coVid.src = coVid.dataset.src;
+      seen ? playIf() : coVid.pause();
+    }, { rootMargin: '250px 0px' }).observe(coVid);
+    if (kv) new MutationObserver(playIf).observe(kv, { attributes: true, attributeFilter: ['class'] });
+    if (coWatch && kv) coWatch.addEventListener('click', () => {
+      const box = $('.kv-box', kv);
+      coVid.pause();
+      box.classList.add('is-v');
+      box.innerHTML = `<video src="${coWatch.dataset.full}" poster="${coWatch.dataset.poster}" controls autoplay playsinline preload="auto"></video>`;
+      kv.classList.add('is-open');
+      document.documentElement.classList.add('is-locked');
+    });
+  }
+
+  // плашка про cookies: показываем, пока посетитель не нажал «Хорошо»; хранилище может быть недоступно (приватный режим)
+  const ck = $('.ck');
+  if (ck) {
+    let seen = false;
+    try { seen = localStorage.getItem('kmk-ck') === '1'; } catch (e) { /* без хранилища просто покажем */ }
+    if (!seen) {
+      ck.hidden = false;
+      setTimeout(() => ck.classList.add('is-on'), 1200);
+      $('.ck-ok', ck).addEventListener('click', () => {
+        try { localStorage.setItem('kmk-ck', '1'); } catch (e) { /* ничего */ }
+        ck.classList.remove('is-on');
+        setTimeout(() => { ck.hidden = true; }, 500);
+      });
+    }
+  }
 })();

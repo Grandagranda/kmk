@@ -80,6 +80,8 @@ html{font-size:max(5px,min(calc(100vw / 180),calc(100vh / 80)),min(7px,calc((100
 .bar-nav:has(a:hover) a:not(:hover){opacity:.3}
 .bar-nav a:hover,.ft-nav a:hover{opacity:1}
 .bar-act,.ft-act{display:flex;align-items:center;gap:max(16px,2rem)}
+/* узкие ПК (901–1180): шесть пунктов меню с шагом 28 px почти упираются в логотип и соцсети */
+@media (min-width:901px) and (max-width:1180px){.bar-nav{gap:max(18px,2.8rem)}}
 
 /* соцсети: залитый круг 18 % белого (макет 37:436), акцент растекается из центра — как у кнопок */
 .soc{display:flex;gap:max(6px,.6rem)}
@@ -280,6 +282,139 @@ html{font-size:max(5px,min(calc(100vw / 180),calc(100vh / 80)),min(7px,calc((100
 .pill.in-cta:hover,.pill.in-cta:focus-visible{color:#0a0a0a}
 .in-row.is-open .in-cta{opacity:1;transition:opacity .7s ease .5s,color .5s var(--ease),translate .6s var(--out),scale .3s ease}
 
+/* ═════════ 4б. Для компаний: интенсивы для всей команды ═════════
+   Колонка 1200: слева 700 (текст, шаги, темы), справа 460 (фото, смета), между ними 40.
+   Шапка как у интенсивов (надзаголовок, заголовок в две строки — вторая серая, подводка).
+   Шаги — строки на линиях, как факты экспертов: номер золотом, шаг, пояснение.
+   Темы — строки списка интенсивов в мелком масштабе: кружок «+» становится золотой галочкой,
+   цена выбранной темы золотеет. Смета прилипает под шапкой, пока листают темы */
+.corp{padding-top:15.3rem}
+.co-top{display:grid;grid-template-columns:minmax(0,1fr) 46rem;gap:4rem;align-items:stretch}
+.co-h{max-width:66rem}
+.co-lead{max-width:54rem}
+.co-how{margin-top:5.2rem}
+.co-cap{margin:0 0 1.4rem;font:700 max(10px,1.2rem)/1.35 "Inter Tight",sans-serif;letter-spacing:.14em;text-transform:uppercase;color:rgba(255,255,255,.32)}
+.co-steps{list-style:none;margin:0;padding:0}
+.co-step{display:grid;grid-template-columns:4.7rem 24.6rem minmax(0,1fr);align-items:baseline;padding:2.1rem 0 2.2rem;border-bottom:1px solid rgba(255,255,255,.14)}
+/* без линии над первым шагом и под последним — их рамкой служат подпись сверху и конец колонки */
+.co-step:first-child{padding-top:.6rem}
+.co-step:last-child{border-bottom:0;padding-bottom:0}
+.co-sn{font:600 max(11px,1.3rem)/1.35 "Inter Tight",sans-serif;color:var(--acc)}
+.co-step b{padding-right:2rem;font:500 max(14px,1.9rem)/1.3 "Inter Tight",sans-serif;letter-spacing:-.02em;color:#fff}
+.co-step p{margin:0;font-size:max(13px,1.5rem);line-height:1.4;color:rgba(255,255,255,.55)}
+/* видео с интенсива: открывается шторкой снизу вверх и чуть «приезжает» из крупного плана (наблюдаем за рамкой —
+   кадр под clip-path наблюдатель не видит). Петля немая; вся рамка — кнопка «смотреть со звуком», подпись слева снизу */
+.co-ph{position:relative;min-height:40rem;margin:0;overflow:hidden;border-radius:1.3rem;background:#12100e}
+.co-ph video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:50% 40%;
+  clip-path:inset(100% 0 0 0);scale:1.12;transition:clip-path 1.3s var(--ease),scale 2s var(--out)}
+.co-ph.is-in video{clip-path:inset(0);scale:1}
+.co-ph.is-in:hover video{scale:1.035;transition:scale 1.2s var(--out)}
+/* затемнение под подписью — многоточечный спад, без видимого края */
+.co-ph::after{content:'';position:absolute;inset:0;pointer-events:none;
+  background:linear-gradient(180deg,rgba(13,10,8,0) 52%,rgba(13,10,8,.16) 62%,rgba(13,10,8,.42) 74%,rgba(13,10,8,.68) 86%,rgba(13,10,8,.82) 100%)}
+.co-watch{all:unset;box-sizing:border-box;position:absolute;inset:0;z-index:1;display:flex;align-items:flex-end;gap:1.6rem;padding:2.8rem;cursor:pointer}
+.co-watch:focus-visible{outline:1px solid rgba(255,255,255,.6);outline-offset:-6px;border-radius:1.3rem}
+.co-watch-ic{flex:none;display:grid;place-items:center;width:6.4rem;height:6.4rem;min-width:48px;min-height:48px;border-radius:50%;
+  background:rgba(255,255,255,.16);box-shadow:inset 0 0 0 1px rgba(255,255,255,.22);transition:background-color .45s,box-shadow .45s,scale .6s var(--out)}
+.co-watch-ic svg{width:1.1rem;height:1.25rem;min-width:9px;min-height:10px;margin-left:.2rem;fill:#fff;transition:fill .45s}
+.co-watch:hover .co-watch-ic,.co-watch:focus-visible .co-watch-ic{background:var(--acc);box-shadow:none;scale:1.08}
+.co-watch:hover .co-watch-ic svg{fill:#0a0a0a}
+.co-watch-tx{display:flex;flex-direction:column;gap:.5rem;padding-bottom:.6rem}
+.co-watch-tx b{font:500 max(15px,2.1rem)/1.15 "Inter Tight",sans-serif;letter-spacing:-.04rem;color:#fff}
+.co-watch-tx small{font:400 max(12px,1.4rem)/1.3 "Inter Tight",sans-serif;color:rgba(255,255,255,.62)}
+
+/* ── сборка программы ── */
+.co-form{display:grid;grid-template-columns:minmax(0,1fr) 46rem;gap:4rem;align-items:start;margin-top:12rem}
+/* у подписей и цифр пиксельный минимум шрифта — у колонок дней и цены тоже, иначе на ноутбуках подписи сходятся */
+.co-legend,.co-row{display:grid;grid-template-columns:5.2rem minmax(0,1fr) max(12rem,108px) max(14.6rem,124px);align-items:center}
+.co-legend{margin:0 0 2rem;white-space:nowrap;font:700 max(10px,1.1rem)/1.35 "Inter Tight",sans-serif;letter-spacing:.14em;text-transform:uppercase;color:rgba(255,255,255,.32)}
+/* «Отметьте темы» — золотом, от левого края, как названия направлений */
+.co-legend span:first-child{grid-column:1/3;color:var(--acc)}
+.co-legend span:last-child{text-align:right}
+.co-dir+.co-dir{margin-top:6.4rem}
+.co-dir-h{display:grid;grid-template-columns:minmax(0,1fr) auto;column-gap:3rem;align-items:end;padding-bottom:1.2rem}
+.co-dir-t{grid-column:1;margin:0;font:500 2.9rem/1.06 "Inter Tight",sans-serif;letter-spacing:-.058rem;color:#fff}
+.co-dir-for{grid-column:1;max-width:46rem;margin:1rem 0 0;font-size:max(13px,1.5rem);line-height:1.35;color:rgba(255,255,255,.52)}
+.co-g{grid-column:2;grid-row:1/span 2;align-self:end;display:inline-flex;align-items:center;gap:.8rem;height:max(30px,3.6rem);margin:0;padding:0 1.6rem 0 1.3rem;
+  border:1px solid rgba(208,161,97,.42);border-radius:3rem;font:500 max(12px,1.4rem)/1 "Inter Tight",sans-serif;color:var(--acc);white-space:nowrap}
+.co-g svg{width:1.8rem;height:1.4rem;min-width:15px;min-height:12px;fill:none;stroke:currentColor;stroke-width:1.3}
+
+.co-row{position:relative;isolation:isolate;min-height:6.8rem;padding:1.3rem 0;border-bottom:1px solid rgba(255,255,255,.14);cursor:pointer;-webkit-tap-highlight-color:transparent}
+/* без линии над первой темой и под последней — только разделители между темами */
+.co-row:last-child{border-bottom:0}
+/* подсветка выбранной строки: тёплый свет слева, гаснет к цене */
+.co-row::before{content:"";position:absolute;inset:0;z-index:-1;pointer-events:none;
+  background:linear-gradient(90deg,rgba(208,161,97,.11),rgba(208,161,97,.035) 55%,rgba(208,161,97,0));opacity:0;transition:opacity .5s ease}
+.co-row:hover::before{opacity:.45}
+.co-row:has(input:checked)::before{opacity:1}
+.co-row input{position:absolute;left:0;top:50%;width:1px;height:1px;margin:0;opacity:0;pointer-events:none}
+.co-ck{position:relative;box-sizing:border-box;width:2.8rem;height:2.8rem;min-width:24px;min-height:24px;border:1px solid rgba(255,255,255,.24);border-radius:50%;
+  transition:background-color .45s,border-color .45s}
+.co-ck::before,.co-ck::after{content:"";position:absolute;left:50%;top:50%;width:1rem;min-width:9px;height:max(1px,.14rem);background:#fff;translate:-50% -50%;
+  transition:scale .45s var(--ease),opacity .3s}
+.co-ck::after{rotate:90deg}
+.co-ck svg{position:absolute;left:50%;top:50%;width:46%;height:46%;translate:-50% -50%;fill:none;stroke:#0a0a0a;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round;
+  stroke-dasharray:12;stroke-dashoffset:12;transition:stroke-dashoffset .45s var(--ease)}
+.co-row:hover .co-ck{border-color:var(--acc)}
+.co-row input:checked~.co-ck{background:var(--acc);border-color:var(--acc)}
+.co-row input:checked~.co-ck::before,.co-row input:checked~.co-ck::after{scale:0;opacity:0}
+.co-row input:checked~.co-ck svg{stroke-dashoffset:0;transition-delay:.12s}
+.co-row input:focus-visible~.co-ck{outline:1px solid rgba(255,255,255,.5);outline-offset:3px}
+.co-t{padding-right:2rem;font:500 max(14px,2rem)/1.2 "Inter Tight",sans-serif;letter-spacing:-.04rem;color:#fff;transition:transform .7s var(--out)}
+.co-row:hover .co-t{transform:translateX(.6rem)}
+.co-d{font:500 max(13px,1.6rem)/1.35 "Inter Tight",sans-serif;color:rgba(255,255,255,.52);white-space:nowrap}
+.co-p{font:500 max(14px,1.9rem)/1.35 "Inter Tight",sans-serif;color:#fff;text-align:right;white-space:nowrap;font-variant-numeric:tabular-nums;transition:color .45s}
+.co-row input:checked~.co-p{color:var(--acc)}
+
+/* ── смета: прилипает под шапкой; тёплое свечение в правом верхнем углу запечено в картинку ── */
+.co-sum{position:sticky;top:calc(max(52px,6.4rem) + 2.4rem)}
+.co-sum-in{position:relative;padding:3.4rem 3.6rem 3.1rem;overflow:hidden;border:1px solid rgba(255,255,255,.09);border-radius:1.3rem;
+  background:#0e0d0c url(img/co/sum-glow.webp?v=1) 100% 0/cover no-repeat}
+.co-sum-ey{margin:0;font:700 max(9px,1.1rem)/1.35 Manrope,sans-serif;letter-spacing:.49em;text-transform:uppercase;color:var(--acc);white-space:nowrap}
+.co-sum-n{min-height:2.43rem;margin:2.2rem 0 0;font:500 max(14px,1.8rem)/1.35 "Inter Tight",sans-serif;color:#fff}
+.co-sum-n.is-empty{font-weight:400;font-size:max(13px,1.5rem);line-height:1.62;color:rgba(255,255,255,.55)}
+.co-total{display:flex;align-items:flex-start;gap:.8rem;margin:.6rem 0 0;white-space:nowrap}
+.co-v{font:400 6.6rem/1.06 "Inter Tight",sans-serif;letter-spacing:-.132rem;font-variant-numeric:tabular-nums;color:#fff}
+.co-total sup{margin-top:1rem;font:600 2rem/1 "Inter Tight",sans-serif;color:var(--acc)}
+.co-calc{margin:.6rem 0 0;font-size:max(12px,1.4rem);line-height:1.35;color:rgba(255,255,255,.5)}
+.co-calc s{color:rgba(255,255,255,.38);text-decoration-thickness:1px}
+.co-sale{display:flex;align-items:center;gap:1.2rem;margin:2.4rem 0 .4rem;padding:0;
+  font-size:max(13px,1.5rem);line-height:1.35;color:rgba(255,255,255,.62);transition:color .45s}
+.co-sale i{flex:none;display:grid;place-items:center;box-sizing:border-box;width:3.2rem;height:3.2rem;min-width:26px;min-height:26px;border:1px solid rgba(208,161,97,.45);border-radius:50%;
+  font:600 max(12px,1.4rem)/1 "Inter Tight",sans-serif;font-style:normal;color:var(--acc);transition:background-color .45s,border-color .45s,color .45s}
+.co-sale.is-on{color:#fff}
+.co-sale.is-on i{background:var(--acc);border-color:var(--acc);color:#0a0a0a}
+/* поля — как в форме заявки, плотнее */
+.co-fields .ap-f{padding:2.9rem 0 1rem}
+.co-fields .ap-f>span:last-child{top:2.9rem}
+.co-fields .ap-f input,.co-fields .ap-cc,.co-fields .ap-f>span:last-child{font-size:max(15px,1.8rem)}
+.co-fields .ap-f input{height:2.45rem}
+.co-sum .ap-agree{margin:2.4rem 0 1.8rem}
+/* кнопка — золотая полоса во всю ширину, как «Записаться» у интенсивов; заливка белым из точки входа */
+.pill.co-btn{width:100%;height:max(46px,5.6rem);padding:0;border-radius:5.6rem;background:var(--acc);color:#0a0a0a;font-size:max(15px,1.7rem)}
+.pill.co-btn::before{width:300rem;height:300rem;margin:-150rem 0 0 -150rem;background:#fff}
+.pill.co-btn:hover,.pill.co-btn:focus-visible{color:#0a0a0a}
+.co-note{margin:1.4rem 0 0;font-size:max(11px,1.3rem);line-height:1.4;color:rgba(255,255,255,.42);text-wrap:balance}
+.co-tel{margin:1.6rem 0 0;text-align:center;font-size:max(12px,1.4rem);line-height:1.35;color:rgba(255,255,255,.45)}
+.co-tel a{color:#fff;white-space:nowrap;text-decoration:underline;text-decoration-thickness:1px;text-underline-offset:.2em;transition:color .3s}
+.co-tel a:hover{color:var(--acc)}
+.co-form.is-busy .co-btn{opacity:.5;pointer-events:none}
+.co-form.is-err .co-err{display:block}
+/* заявка ушла — смета гаснет, на её месте спасибо */
+.co-sum-in>*{transition:opacity .5s ease}
+.co-ok{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:center;gap:2rem;padding:3.4rem 3.6rem;opacity:0;visibility:hidden;transition:opacity .8s ease,visibility 0s .8s}
+.co-ok b{font:500 3.6rem/1.06 "Inter Tight",sans-serif;letter-spacing:-.072rem}
+.co-ok p{margin:0;font-size:max(13px,1.5rem);line-height:1.35;color:rgba(255,255,255,.58)}
+.co-form.is-sent .co-sum-in>:not(.co-ok){opacity:0;visibility:hidden}
+.co-form.is-sent .co-ok{opacity:1;visibility:visible;transition:opacity .8s ease .3s}
+.co-form.is-sent .co-row{pointer-events:none}
+/* панель итога внизу экрана — только на телефоне (mobile.css) */
+.co-bar{display:none}
+@media (prefers-reduced-motion:reduce){
+  .co-ph video{clip-path:none;scale:1;transition:none}
+  .co-t,.co-ck,.co-ck svg{transition:none}
+}
+
 /* ═════════ 5. Эксперты (кадр «6» макета, узлы 49:56–49:246) ═════════
    Шапка как у интенсивов: надзаголовок, заголовок +29, подзаголовок +142, карточки на 40 ниже него.
    Карточки 530, между ними 10; наведённая 697, соседняя 493 (flex-grow 697/493), без наведения — поровну.
@@ -376,6 +511,9 @@ html{font-size:max(5px,min(calc(100vw / 180),calc(100vh / 80)),min(7px,calc((100
 .geo-land path.is-hot{filter:brightness(1.35);transition-duration:.3s}
 .geo-arc{fill:none;stroke-width:1;opacity:.31;transition:opacity .5s ease}
 .geo-arc.is-hot{opacity:.95}
+/* карта на своём слое: растрируется один раз, при прокрутке только сдвигается (светящиеся точки с фильтрами дорого перерисовывать) */
+.geo-map>.geo-svg:not(.geo-ov){will-change:transform}
+.geo-ov{position:absolute;inset:0;pointer-events:none;will-change:transform}
 .geo-pulses path{fill:none;stroke-width:1;stroke-linecap:butt}
 .geo-dot{fill:#fbf4e3;stroke:transparent;stroke-width:9;opacity:0;transform-box:fill-box;transform-origin:center;scale:0;transition:opacity .5s ease,scale .6s var(--out)}
 .geo-dot.is-lit{opacity:1;scale:1}
@@ -505,6 +643,19 @@ html{font-size:max(5px,min(calc(100vw / 180),calc(100vh / 80)),min(7px,calc((100
 .ap-send p{margin:1.3rem 0 0 1rem;text-wrap:balance;font-size:max(10px,1.3rem);line-height:1.35;color:rgba(255,255,255,.38)}
 .ap-send a{color:inherit;text-decoration:underline;text-underline-offset:.15em;text-decoration-thickness:1px;transition:color .3s}
 .ap-send a:hover{color:#fff}
+/* галочка согласия на обработку персональных данных (152-ФЗ): обязательная, по умолчанию не отмечена */
+.ap-agree{position:relative;display:flex;align-items:flex-start;gap:1rem;margin:0 0 2rem;cursor:pointer;font-size:max(11px,1.4rem);line-height:1.4;color:rgba(255,255,255,.62)}
+.ap-agree input{position:absolute;left:0;top:0;width:1.8rem;height:1.8rem;opacity:0;margin:0}
+.ap-agree i{position:relative;flex:none;width:max(14px,1.8rem);height:max(14px,1.8rem);margin-top:calc((1.4em - max(14px,1.8rem)) / 2);border:1px solid rgba(255,255,255,.34);border-radius:.4rem;transition:border-color .3s,background-color .3s}
+.ap-agree i::after{content:"";position:absolute;left:32%;top:14%;width:30%;height:52%;border:solid #fff;border-width:0 2px 2px 0;transform:rotate(45deg) scale(0);transition:transform .2s}
+.ap-agree:hover i{border-color:rgba(255,255,255,.6)}
+.ap-agree input:checked+i{background:var(--acc);border-color:var(--acc)}
+.ap-agree input:checked+i::after{transform:rotate(45deg) scale(1)}
+.ap-agree input:focus-visible+i{outline:1px solid rgba(255,255,255,.5);outline-offset:3px}
+.ap-agree a{color:inherit;text-decoration:underline;text-underline-offset:.15em;text-decoration-thickness:1px;transition:color .3s}
+.ap-agree a:hover{color:#fff}
+.ap-agree.is-bad{color:#ff8a5c}
+.ap-agree.is-bad i{border-color:#ff8a5c}
 .ap-ok{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:center;gap:2rem;
   opacity:0;visibility:hidden;transition:opacity .8s ease,visibility 0s .8s}
 .ap-ok b{font:500 4.5rem/1.06 "Inter Tight",sans-serif;letter-spacing:-.09rem}
@@ -590,3 +741,13 @@ html{font-size:max(5px,min(calc(100vw / 180),calc(100vh / 80)),min(7px,calc((100
 .ap-cc{position:relative}
 .ap-cc b{font-weight:400}
 .ap-ccsel{position:absolute;inset:-.6rem -.4rem;width:auto;opacity:0;cursor:pointer;font-size:16px;-webkit-appearance:none;appearance:none}
+
+/* плашка про cookies: одна строка внизу слева, после «Хорошо» больше не показывается (blocks.js) */
+.ck{position:fixed;left:2.4rem;bottom:2.4rem;z-index:60;display:flex;align-items:center;gap:2rem;max-width:min(62rem,calc(100vw - 32px));padding:1.4rem 1.4rem 1.4rem 2.2rem;background:rgba(16,16,16,.92);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);border:1px solid rgba(255,255,255,.1);border-radius:1.6rem;box-shadow:0 1rem 4rem rgba(0,0,0,.45);opacity:0;transform:translateY(1.2rem);transition:opacity .5s var(--out),transform .5s var(--out)}
+.ck[hidden]{display:none}
+.ck.is-on{opacity:1;transform:none}
+.ck p{margin:0;font-size:max(12px,1.35rem);line-height:1.45;color:rgba(255,255,255,.66)}
+.ck a{color:inherit;text-decoration:underline;text-underline-offset:.15em;text-decoration-thickness:1px;transition:color .3s}
+.ck a:hover{color:#fff}
+.ck-ok{flex:none;height:max(36px,4.2rem);padding:0 2.4rem;border:0;border-radius:5rem;background:var(--acc);color:#fff;cursor:pointer;font:400 max(13px,1.5rem)/1 "Inter Tight",sans-serif;transition:background-color .3s}
+.ck-ok:hover,.ck-ok:focus-visible{background:#dcb27a}
