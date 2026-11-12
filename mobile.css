@@ -357,10 +357,14 @@ html.is-menu .mnav-links a:nth-child(6){transition-delay:.25s}
 .cost-tm p{font-size:1.4rem}
 
 .cost-end{min-height:0;margin-top:.8rem;border-radius:1rem}
-.cost-eph{position:relative;width:auto;aspect-ratio:320/200}
+.cost-eph{position:relative;width:auto;aspect-ratio:320/200;overflow:hidden}
 .cost-eph img{object-position:60% 40%}
 .cost-eph::after{background:linear-gradient(0deg,#0e0d0c 0%,rgba(14,13,12,.72) 20%,rgba(14,13,12,.25) 45%,rgba(14,13,12,0) 65%)}
 .cost-et{min-height:0;max-width:none;margin-top:-2rem;padding:0 2rem 2.6rem}
+/* стык кадра и карточки: последний ряд фото (отдельный слой из-за масштаба) выглядывал из-под затемнения светлой строкой —
+   закрываем полосой цвета карточки поверх края кадра, текст рисуется над ней */
+.cost-et{position:relative;z-index:0}
+.cost-et::before{content:"";position:absolute;left:0;right:0;top:calc(2rem - 4px);height:8px;z-index:-1;background:#0e0d0c;pointer-events:none}
 .cost-et h3{font-size:2.6rem;letter-spacing:-.052rem}
 .cost-et p{margin-top:1.4rem;font-size:1.4rem}
 .cost-act{flex-direction:column;align-items:stretch;gap:1.8rem;margin-top:2.4rem}
