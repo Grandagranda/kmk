@@ -499,8 +499,7 @@ html.is-menu .mnav-links a:nth-child(6){transition-delay:.25s}
 }
 
 /* плашка cookies на телефоне: во всю ширину с полями 16 px, кнопка под текстом */
-.ck{left:16px;right:16px;bottom:16px;max-width:none;flex-direction:column;align-items:stretch;gap:1.4rem;padding:1.8rem;border-radius:1.8rem}
-.ck p{font-size:1.35rem}
-.ck-ok,.ck-no{height:4.4rem;font-size:1.5rem}
+.ck{left:12px;right:12px;bottom:12px;width:auto;gap:1.2rem;padding:1.4rem 1.4rem 1.4rem 1.6rem;border-radius:1.6rem}
 .ck p{font-size:1.25rem}
+.ck-ok,.ck-no{height:3.8rem;padding:0 1.2rem;font-size:1.35rem}
 .ap-pol,.ap-send .ap-pol{margin:-1rem 0 1.8rem 2.8rem;font-size:1.2rem;white-space:normal}

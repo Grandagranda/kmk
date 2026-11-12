@@ -1000,14 +1000,17 @@ html{font-size:max(5px,min(calc(100vw / 180),calc(100vh / 80)),min(7px,calc((100
 .ap-ccsel{position:absolute;inset:-.6rem -.4rem;width:auto;opacity:0;cursor:pointer;font-size:16px;-webkit-appearance:none;appearance:none}
 
 /* плашка про cookies: одна строка внизу слева, после «Хорошо» больше не показывается (blocks.js) */
-.ck{position:fixed;left:2.4rem;bottom:2.4rem;z-index:60;display:flex;align-items:center;gap:2rem;max-width:min(80rem,calc(100vw - 32px));padding:1.4rem 1.4rem 1.4rem 2.2rem;background:rgba(16,16,16,.92);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);border:1px solid rgba(255,255,255,.1);border-radius:1.6rem;box-shadow:0 1rem 4rem rgba(0,0,0,.45);opacity:0;transform:translateY(1.2rem);transition:opacity .5s var(--out),transform .5s var(--out)}
+.ck{position:fixed;left:2.4rem;bottom:2.4rem;z-index:60;display:flex;flex-direction:column;gap:1.2rem;width:min(40rem,calc(100vw - 32px));padding:1.6rem 1.6rem 1.6rem 1.8rem;background:rgba(16,16,16,.92);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);border:1px solid rgba(255,255,255,.1);border-radius:1.6rem;box-shadow:0 1rem 4rem rgba(0,0,0,.45);opacity:0;transform:translateY(1.2rem);transition:opacity .5s var(--out),transform .5s var(--out)}
 .ck[hidden]{display:none}
 .ck.is-on{opacity:1;transform:none}
-.ck p{margin:0;font-size:max(12px,1.35rem);line-height:1.45;color:rgba(255,255,255,.66)}
-.ck a{color:inherit;text-decoration:underline;text-underline-offset:.15em;text-decoration-thickness:1px;transition:color .3s}
-.ck a:hover{color:#fff}
-.ck-ok{flex:none;height:max(36px,4.2rem);padding:0 2.4rem;border:0;border-radius:5rem;background:var(--acc);color:#fff;cursor:pointer;font:400 max(13px,1.5rem)/1 "Inter Tight",sans-serif;transition:background-color .3s}
+.ck p{margin:0;font-size:max(12px,1.3rem);line-height:1.45;color:rgba(255,255,255,.66)}
+.ck .ck-det{margin-top:.8rem;color:rgba(255,255,255,.5)}
+.ck a,.ck-more{color:inherit;text-decoration:underline;text-underline-offset:.15em;text-decoration-thickness:1px;transition:color .3s}
+.ck-more{padding:0;border:0;background:none;font:inherit;cursor:pointer}
+.ck a:hover,.ck-more:hover{color:#fff}
+.ck-btns{display:flex;gap:.8rem}
+.ck-ok,.ck-no{flex:1 1 auto;height:max(34px,3.8rem);padding:0 1.8rem;border-radius:5rem;cursor:pointer;font:400 max(13px,1.4rem)/1 "Inter Tight",sans-serif;white-space:nowrap}
+.ck-ok{border:0;background:var(--acc);color:#fff;transition:background-color .3s}
 .ck-ok:hover,.ck-ok:focus-visible{background:#dcb27a}
-.ck-btns{display:flex;flex-direction:column;gap:.8rem;flex:none}
-.ck-no{flex:none;height:max(36px,4.2rem);padding:0 2.4rem;border:1px solid rgba(255,255,255,.22);border-radius:5rem;background:none;color:rgba(255,255,255,.8);cursor:pointer;font:400 max(13px,1.5rem)/1 "Inter Tight",sans-serif;transition:border-color .3s,color .3s}
+.ck-no{border:1px solid rgba(255,255,255,.22);background:none;color:rgba(255,255,255,.8);transition:border-color .3s,color .3s}
 .ck-no:hover,.ck-no:focus-visible{border-color:rgba(255,255,255,.6);color:#fff}

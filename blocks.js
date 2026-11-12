@@ -1023,6 +1023,9 @@
         location.reload();
       }
     }));
+    // «Подробнее» — полный перечень данных Метрики (политика, п. 6.2: раскрывается до согласия)
+    const more = ck.querySelector('.ck-more'), det = ck.querySelector('.ck-det');
+    if (more && det) more.addEventListener('click', () => { det.hidden = !det.hidden; more.setAttribute('aria-expanded', String(!det.hidden)); more.textContent = det.hidden ? 'Подробнее' : 'Свернуть'; });
     document.addEventListener('click', e => {
       if (!e.target.closest('[data-ck-open]')) return;
       e.preventDefault();
