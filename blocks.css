@@ -632,7 +632,9 @@ html{font-size:max(5px,min(calc(100vw / 180),calc(100vh / 80)),min(7px,calc((100
   .cost-h{margin-top:calc(2.6 * var(--u));font-size:calc(13 * var(--u));line-height:.96;letter-spacing:-.04em;text-shadow:0 0 8rem rgba(8,6,4,.4)}
   .cost-lead{max-width:calc(62 * var(--u));margin:calc(3.4 * var(--u)) auto 0;font-size:max(15px,calc(2 * var(--u)));line-height:1.45;color:rgba(255,255,255,.8);
     text-shadow:0 0 2.4rem rgba(8,6,4,.7)}
-  .cost-ph{position:absolute;inset:0;z-index:-2;height:auto;margin:0;border-radius:0;background:#16130f}
+  /* низ кадра на 4px выше края шапки: при дробной высоте последний ряд фото выглядывал из-под затемнения светлой полоской */
+  .cost-ph{position:absolute;inset:0 0 4px;z-index:-2;height:auto;margin:0;border-radius:0;background:#16130f}
+  .cost-head{background:#0a0a0a}
   .cost-ph img{position:absolute;left:0;top:0;object-position:50% 60%;clip-path:none;opacity:0;scale:1.08;
     translate:0 calc(var(--cy,0) * .42px);transition:opacity 1.4s ease,scale 3.2s var(--out)}
   .cost.is-open .cost-ph img{opacity:1;scale:1;transition-delay:.15s}
@@ -640,7 +642,10 @@ html{font-size:max(5px,min(calc(100vw / 180),calc(100vh / 80)),min(7px,calc((100
 
   .cost-end{--endh:max(56rem,calc(100svh - max(16px,2.8rem)));display:block;min-height:var(--endh);margin:0 calc(60rem - 50cqw);
     padding:0 calc(50cqw - 60rem);border:0;border-radius:0;background:#0a0a0a;isolation:isolate;opacity:1;translate:none}
-  .cost-eph{position:absolute;inset:0;z-index:-2;width:auto;margin:0;overflow:hidden;background:#16130f}
+  /* кадр рисуется отдельным слоем (параллакс, масштаб): его край сглаживается иначе, чем затемнение, и при дробной
+     координате над финалом проступала светлая строка. Стык закрывает полоса фона листа поверх кадра (::before финала) */
+  .cost-end::before{content:"";position:absolute;left:0;right:0;top:0;height:14px;z-index:-1;pointer-events:none;background:linear-gradient(180deg,#0a0a0a 65%,rgba(10,10,10,0))}
+  .cost-eph{position:absolute;inset:4px 0 0;z-index:-2;width:auto;margin:0;overflow:hidden;background:#16130f}
   .cost-eph img{position:absolute;left:0;top:-12%;height:112%;object-position:50% 52%;scale:1.1;
     translate:0 calc((1 - var(--ep,1)) * 10.7%);transition:scale 2.8s var(--out) .1s}
   .cost-end.is-in .cost-eph img{scale:1}
