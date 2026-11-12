@@ -408,11 +408,263 @@ html{font-size:max(5px,min(calc(100vw / 180),calc(100vh / 80)),min(7px,calc((100
 .co-form.is-sent .co-sum-in>:not(.co-ok){opacity:0;visibility:hidden}
 .co-form.is-sent .co-ok{opacity:1;visibility:visible;transition:opacity .8s ease .3s}
 .co-form.is-sent .co-row{pointer-events:none}
+/* «Дорого ли это?» — вторая кнопка сметы, прямо под ценой: золотой контур во всю ширину (главная «Обсудить
+   программу» — залитая), слева золотой кружок с вопросом, справа стрелка. Наведение — как у пилюль сайта:
+   заливка золотом из точки входа, стрелка уезжает и приходит новая. Когда отмечена первая тема, по кнопке
+   один раз пробегает блик (класс .is-ping ставит blocks.js) */
+.pill.co-cost{justify-content:flex-start;gap:1.4rem;width:100%;height:max(46px,5.6rem);margin:2.6rem 0 0;padding:0 2.6rem 0 max(5px,.7rem);
+  border-radius:5.6rem;background:rgba(208,161,97,.08);box-shadow:inset 0 0 0 1px rgba(208,161,97,.62);color:#fff;
+  font:500 max(14px,1.7rem)/1.35 "Inter Tight",sans-serif;-webkit-tap-highlight-color:transparent;
+  transition:color .5s var(--ease),box-shadow .45s,translate .6s var(--out),scale .3s ease}
+.pill.co-cost::before{width:300rem;height:300rem;margin:-150rem 0 0 -150rem;background:var(--acc)}
+.pill.co-cost:hover,.pill.co-cost:focus-visible{color:#0a0a0a;box-shadow:inset 0 0 0 1px var(--acc)}
+.co-cost i{flex:none;display:grid;place-items:center;width:max(34px,4.2rem);height:max(34px,4.2rem);border-radius:50%;background:var(--acc);
+  font:600 max(14px,1.7rem)/1 "Inter Tight",sans-serif;font-style:normal;color:#0a0a0a;transition:background-color .45s,color .45s}
+.co-cost:hover i,.co-cost:focus-visible i{background:#0a0a0a;color:var(--acc)}
+.co-cost-t{flex:1 1 auto;text-align:left}
+.co-cost .pill-ar{color:var(--acc);transition:color .45s}
+.co-cost:hover .pill-ar,.co-cost:focus-visible .pill-ar{color:#0a0a0a}
+.co-cost::after{content:"";position:absolute;top:0;bottom:0;left:0;z-index:-1;width:45%;pointer-events:none;opacity:0;translate:-110% 0;
+  background:linear-gradient(100deg,rgba(242,214,170,0) 0%,rgba(242,214,170,.1) 30%,rgba(242,214,170,.34) 50%,rgba(242,214,170,.1) 70%,rgba(242,214,170,0) 100%)}
+.co-cost.is-ping::after{animation:co-ping 1.6s cubic-bezier(.45,0,.2,1) .3s}
+@keyframes co-ping{0%{opacity:1;translate:-110% 0}100%{opacity:1;translate:240% 0}}
+.co-cost+.co-sale{margin-top:1.8rem}
+
 /* панель итога внизу экрана — только на телефоне (mobile.css) */
 .co-bar{display:none}
 @media (prefers-reduced-motion:reduce){
   .co-ph video{clip-path:none;scale:1;transition:none}
   .co-t,.co-ck,.co-ck svg{transition:none}
+}
+
+/* ═════════ 4в. Окно «Дорого ли это?» ═════════
+   Лист поверх страницы: выезжает снизу, сверху остаётся полоска затемнённого сайта — видно, что страница
+   никуда не делась. Страница под листом стоит (html.is-locked), у листа своя прокрутка.
+   Внутри — колонка 1200, как у блоков. Шапка: надзаголовок, крупный вопрос, подводка и фото справа.
+   Дальше четыре раздела одной сеткой: слева номер золотом, заголовок и одна фраза (36), справа цифры и схемы.
+   Язык сайта: линии 14 % белого, крупные цифры Inter Tight с золотым знаком сверху, подписи капсом,
+   тёплый свет только у главной строки. В финале — фото команды и кнопка к заявке.
+   Появление: шапка — когда лист выехал, разделы — по мере прокрутки листа (класс .is-in ставит blocks.js) */
+.cost{position:fixed;inset:0;z-index:95;visibility:hidden;pointer-events:none;transition:visibility 0s .85s}
+.cost.is-open{visibility:visible;pointer-events:auto;transition:none}
+.cost-dim{position:absolute;inset:0;background:rgba(4,4,4,.8);opacity:0;transition:opacity .6s ease .1s}
+.cost.is-open .cost-dim{opacity:1;transition-delay:0s}
+.cost-sheet{position:absolute;left:0;right:0;top:max(16px,2.8rem);bottom:0;overflow:hidden;border-radius:2.4rem 2.4rem 0 0;
+  background:#0a0a0a;box-shadow:0 -2rem 6rem rgba(0,0,0,.55);
+  transform:translateY(calc(100% + 6rem));transition:transform .8s cubic-bezier(.6,0,.4,1)}
+/* светлая кромка по верху листа — без неё на тёмной странице не видно, где кончается лист */
+.cost-sheet::before{content:"";position:absolute;left:0;right:0;top:0;z-index:2;height:2.4rem;border-radius:inherit;pointer-events:none;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.1)}
+.cost.is-open .cost-sheet{transform:none;transition:transform 1.05s cubic-bezier(.16,1,.3,1)}
+.cost-x{all:unset;box-sizing:border-box;position:absolute;top:2.4rem;right:2.4rem;z-index:3;width:5.6rem;height:5.6rem;min-width:44px;min-height:44px;
+  border-radius:50%;background:rgba(38,36,34,.86);cursor:pointer;transition:background-color .35s,scale .3s ease}
+.cost-x::before,.cost-x::after{content:"";position:absolute;left:50%;top:50%;width:2rem;min-width:16px;height:1.5px;border-radius:1px;background:#fff;
+  translate:-50% -50%;rotate:45deg;transition:background-color .35s,rotate .6s var(--ease)}
+.cost-x::after{rotate:-45deg}
+.cost-x:hover,.cost-x:focus-visible{background:var(--acc)}
+.cost-x:hover::before,.cost-x:hover::after,.cost-x:focus-visible::before,.cost-x:focus-visible::after{background:#0a0a0a}
+.cost-x:hover::before{rotate:135deg}.cost-x:hover::after{rotate:45deg}
+.cost-x:active{scale:.94}
+.cost-x:focus-visible{outline:1px solid rgba(255,255,255,.6);outline-offset:4px}
+.cost-sc{position:absolute;inset:0;overflow-x:hidden;overflow-y:auto;overscroll-behavior:contain;outline:0;
+  scrollbar-width:thin;scrollbar-color:rgba(255,255,255,.2) transparent}
+.cost-in{position:relative;width:min(120rem,calc(100% - 32px));margin:0 auto;padding:9.6rem 0 6rem}
+/* закатная полоса за шапкой — та же картинка, что у «Интенсивов» (края у неё #0a0a0a, как фон листа) */
+.cost-glow{position:absolute;left:50%;top:-44rem;width:180rem;height:138.4rem;margin-left:-90rem;max-width:none;pointer-events:none;opacity:0;
+  transition:opacity 1.6s ease}
+.cost.is-open .cost-glow{opacity:.85;transition-delay:.4s}
+
+/* ── шапка ── */
+.cost-head{display:grid;grid-template-columns:minmax(0,1fr) 52rem;column-gap:6rem;align-items:center;padding-bottom:8rem}
+.cost-h{margin:1.8rem 0 0;font:500 8rem/1 "Inter Tight",sans-serif;letter-spacing:-.24rem;color:#fff}
+.cost-lead{max-width:50rem;margin:2.8rem 0 0;font-size:max(14px,1.8rem);line-height:1.45;color:rgba(255,255,255,.6)}
+.cost-ph{position:relative;height:32rem;margin:0;overflow:hidden;border-radius:1.3rem;background:#16130f}
+.cost-ph img{width:100%;height:100%;object-fit:cover;object-position:50% 62%;clip-path:inset(100% 0 0 0);scale:1.12;
+  transition:clip-path 1.3s var(--ease),scale 2s var(--out)}
+.cost.is-open .cost-ph img{clip-path:inset(0);scale:1;transition-delay:.35s}
+.cost-hl>*{opacity:0;translate:0 2.4rem;filter:blur(8px);transition:opacity .9s ease,translate 1.1s var(--out),filter .9s ease}
+.cost.is-open .cost-hl>*{opacity:1;translate:none;filter:none}
+.cost.is-open .cost-hl>:nth-child(1){transition-delay:.3s}
+.cost.is-open .cost-hl>:nth-child(2){transition-delay:.38s}
+.cost.is-open .cost-hl>:nth-child(3){transition-delay:.48s}
+
+/* ── разделы ── */
+.cost-sec{display:grid;grid-template-columns:34rem minmax(0,1fr);column-gap:6rem;padding:6.4rem 0 7.6rem;border-top:1px solid rgba(255,255,255,.14)}
+.cost-n{display:block;font:600 max(11px,1.3rem)/1.35 "Inter Tight",sans-serif;color:var(--acc)}
+.cost-sl h3{margin:1.4rem 0 0;font:500 3.2rem/1.08 "Inter Tight",sans-serif;letter-spacing:-.064rem;color:#fff}
+.cost-sl p{max-width:32rem;margin:1.6rem 0 0;font-size:max(13px,1.5rem);line-height:1.45;color:rgba(255,255,255,.55)}
+.cost-cap{margin:0 0 2.4rem;font:700 max(10px,1.1rem)/1.35 "Inter Tight",sans-serif;letter-spacing:.14em;text-transform:uppercase;color:rgba(255,255,255,.34)}
+.cost-sl,.cost-sr{opacity:0;translate:0 3rem;transition:opacity 1s ease,translate 1.2s var(--out)}
+.cost-sr{transition-delay:.12s}
+.is-in>.cost-sl,.is-in>.cost-sr{opacity:1;translate:none}
+
+/* 01 · цифры через вертикальные линии, как «О проекте»: число, золотой ₽ сверху, подпись капсом над ним */
+.cost-figs{display:grid;grid-template-columns:1.08fr 1fr 1fr}
+.cost-fig{min-width:0;padding:0 1.2rem 0 2.8rem;border-left:1px solid rgba(255,255,255,.14)}
+.cost-fig:first-child{padding-left:0;border-left:0}
+.cost-fig small{display:block;font:700 max(10px,1.1rem)/1.35 "Inter Tight",sans-serif;letter-spacing:.14em;text-transform:uppercase;color:rgba(255,255,255,.38);white-space:nowrap}
+.cost-fig b{display:flex;align-items:flex-start;margin-top:2rem;font:400 5.2rem/1 "Inter Tight",sans-serif;letter-spacing:-.104rem;
+  font-variant-numeric:tabular-nums;white-space:nowrap;color:#fff}
+.cost-fig em{align-self:flex-end;margin:0 .8rem .5rem 0;font:400 max(13px,1.6rem)/1 "Inter Tight",sans-serif;font-style:normal;letter-spacing:0;color:rgba(255,255,255,.5)}
+.cost-fig sup{margin:.4rem 0 0 .6rem;font:600 1.8rem/1 "Inter Tight",sans-serif;letter-spacing:0;color:var(--acc)}
+.cost-fig p{margin:1.6rem 0 0;font-size:max(12px,1.4rem);line-height:1.4;color:rgba(255,255,255,.5)}
+.cost-chip{display:inline-flex;align-items:center;gap:1rem;height:max(36px,4.4rem);margin:4.8rem 0 0;padding:0 2.2rem 0 1.6rem;
+  border:1px solid rgba(208,161,97,.42);border-radius:3rem;font:500 max(13px,1.5rem)/1 "Inter Tight",sans-serif;color:var(--acc);white-space:nowrap}
+.cost-chip svg{width:2.2rem;height:2.2rem;min-width:18px;min-height:18px;fill:none;stroke:currentColor;stroke-width:1.4;stroke-linejoin:round;stroke-linecap:round}
+
+/* 02 · два сценария: крупная цифра, подпись справа, под ними полоса — длина в доле от большей цифры */
+.cost-g{display:grid;grid-template-columns:25rem minmax(0,1fr);align-items:end;column-gap:3rem}
+.cost-g+.cost-g{margin-top:4.8rem}
+.cost-gn{display:flex;align-items:flex-start;font:400 7.2rem/.9 "Inter Tight",sans-serif;letter-spacing:-.144rem;white-space:nowrap;
+  font-variant-numeric:tabular-nums;color:#fff}
+.cost-gn em{align-self:center;margin:0 .4rem 0 -.2rem;font-size:.6em;font-style:normal;letter-spacing:0;color:rgba(255,255,255,.45)}
+/* пока число набегает, знак не ездит: ширину держит невидимая копия итогового числа */
+.cost-num{display:inline-grid}
+.cost-num>span{grid-area:1/1}
+.cost-ghost{visibility:hidden}
+.cost-gn em.is-w{align-self:flex-end;margin:0 .9rem .6rem 0;font:400 max(14px,2rem)/1 "Inter Tight",sans-serif;letter-spacing:0;color:rgba(255,255,255,.55)}
+.cost-gn sup{margin:.3rem 0 0 .5rem;font:600 2.6rem/1 "Inter Tight",sans-serif;letter-spacing:0;color:var(--acc)}
+.cost-gt{padding-bottom:.4rem}
+.cost-gt strong{display:block;font:500 max(15px,2.1rem)/1.2 "Inter Tight",sans-serif;letter-spacing:-.042rem;color:#fff}
+.cost-gt p{margin:.6rem 0 0;font-size:max(13px,1.5rem);line-height:1.4;color:rgba(255,255,255,.52)}
+.cost-bar{grid-column:1/-1;position:relative;display:block;height:.6rem;min-height:4px;margin-top:2.4rem;border-radius:1rem;background:rgba(255,255,255,.07);overflow:hidden}
+.cost-bar i{position:absolute;left:0;top:0;bottom:0;width:var(--w);border-radius:inherit;background:linear-gradient(90deg,#5c4428,var(--acc));
+  transform:scaleX(0);transform-origin:0 50%;transition:transform 1.8s var(--out) calc(.35s + var(--i,0) * .25s)}
+.is-in .cost-bar i{transform:none}
+.cost-note{display:flex;align-items:flex-start;gap:1.2rem;margin:4.4rem 0 0;font-size:max(12px,1.3rem);line-height:1.45;color:rgba(255,255,255,.42)}
+.cost-note i{flex:none;display:grid;place-items:center;box-sizing:border-box;width:2rem;height:2rem;min-width:17px;min-height:17px;margin-top:-.1rem;
+  border:1px solid rgba(255,255,255,.28);border-radius:50%;font:600 max(10px,1.1rem)/1 "Inter Tight",sans-serif;font-style:normal;color:rgba(255,255,255,.6)}
+
+/* 03 · показатели через вертикальные линии; главная строка — «сложные заказы» — с тёплым светом слева,
+   как выбранная тема в смете */
+/* колонка не уже своего заголовка (он в одну строку): «Возвращаемость» на ноутбуках забирает место у соседей */
+.cost-ms{display:grid;grid-template-columns:repeat(4,minmax(auto,1fr));list-style:none;margin:0;padding:0}
+.cost-m{padding:0 1.6rem 0 2.6rem;border-left:1px solid rgba(255,255,255,.14)}
+.cost-m:first-child{padding-left:0;border-left:0}
+.cost-m svg,.cost-wide svg,.cost-tm svg{display:block;width:3.4rem;height:3.4rem;min-width:28px;min-height:28px;fill:none;stroke:var(--acc);stroke-width:1.2;
+  stroke-linecap:round;stroke-linejoin:round}
+.cost-m b{display:block;margin-top:2.6rem;font:500 max(15px,2rem)/1.2 "Inter Tight",sans-serif;letter-spacing:-.04rem;color:#fff;white-space:nowrap}
+.cost-m p{margin:.8rem 0 0;font-size:max(12px,1.4rem);line-height:1.4;color:rgba(255,255,255,.5)}
+.cost-wide{display:grid;grid-template-columns:auto auto minmax(0,1fr);align-items:center;column-gap:2.4rem;margin-top:4.8rem;padding:2.6rem 3.2rem;
+  border:1px solid rgba(208,161,97,.26);border-radius:1.3rem;background:linear-gradient(90deg,rgba(208,161,97,.12),rgba(208,161,97,.035) 55%,rgba(208,161,97,0))}
+.cost-wide b{font:500 max(15px,2.1rem)/1.2 "Inter Tight",sans-serif;letter-spacing:-.042rem;color:#fff;white-space:nowrap}
+.cost-wide p{margin:0;padding-left:2.4rem;border-left:1px solid rgba(255,255,255,.16);font-size:max(13px,1.5rem);line-height:1.4;color:rgba(255,255,255,.62)}
+.cost-ms li,.cost-wide{opacity:0;translate:0 2rem;transition:opacity .9s ease calc(.25s + var(--i,4) * .09s),translate 1.1s var(--out) calc(.25s + var(--i,4) * .09s)}
+.is-in .cost-ms li,.is-in .cost-wide{opacity:1;translate:none}
+
+/* 04 · лесенка: ступени поднимаются слева направо — от компетенций к доверию клиентов. Проступь и подступёнок —
+   золотые линии, дорисовываются по очереди; под каждой проступью номер и текст */
+.cost-path{--s:3.6rem;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));list-style:none;margin:0;padding:0}
+.cost-p{position:relative;min-width:0;padding:calc(var(--k) * var(--s) + 2.2rem) 1.6rem 0 2.2rem}
+.cost-p::before{content:"";position:absolute;left:0;right:0;top:calc(var(--k) * var(--s));height:1px;background:rgba(208,161,97,.62);
+  transform:scaleX(0);transform-origin:0 50%;transition:transform .7s var(--out) calc(.35s + var(--i) * .3s)}
+.cost-p+.cost-p::after{content:"";position:absolute;left:0;top:calc(var(--k) * var(--s));width:1px;height:var(--s);background:rgba(208,161,97,.62);
+  transform:scaleY(0);transform-origin:50% 100%;transition:transform .35s ease calc(.2s + var(--i) * .3s)}
+.cost-p>i{position:absolute;left:-.4rem;top:calc(var(--k) * var(--s) - .4rem);width:.9rem;height:.9rem;min-width:7px;min-height:7px;border-radius:50%;
+  background:var(--acc);box-shadow:0 0 0 .5rem rgba(208,161,97,.14);scale:0;transition:scale .5s var(--out) calc(.3s + var(--i) * .3s)}
+.cost-p span{display:block;font:600 max(11px,1.3rem)/1.35 "Inter Tight",sans-serif;color:var(--acc)}
+.cost-p b{display:block;margin-top:1rem;font:500 max(14px,1.8rem)/1.25 "Inter Tight",sans-serif;letter-spacing:-.036rem;color:#fff}
+.cost-p span,.cost-p b{opacity:0;translate:0 1.4rem;transition:opacity .8s ease calc(.45s + var(--i) * .3s),translate 1s var(--out) calc(.45s + var(--i) * .3s)}
+.is-in .cost-p::before,.is-in .cost-p::after{transform:none}
+.is-in .cost-p>i{scale:1}
+.is-in .cost-p span,.is-in .cost-p b{opacity:1;translate:none}
+.cost-cap2{margin-top:6.4rem}
+.cost-tm{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));list-style:none;margin:0;padding:0}
+.cost-tm li{display:grid;grid-template-columns:auto minmax(0,1fr);column-gap:1.6rem;align-content:start;min-width:0;padding:0 1.6rem 0 2.6rem;
+  border-left:1px solid rgba(255,255,255,.14);opacity:0;translate:0 2rem;
+  transition:opacity .9s ease calc(1.3s + var(--i) * .1s),translate 1.1s var(--out) calc(1.3s + var(--i) * .1s)}
+.cost-tm li:first-child{padding-left:0;border-left:0}
+.cost-tm svg{grid-row:1/span 2;margin-top:-.2rem}
+.cost-tm b{font:500 max(15px,1.9rem)/1.2 "Inter Tight",sans-serif;letter-spacing:-.038rem;color:#fff}
+.cost-tm p{margin:.6rem 0 0;font-size:max(12px,1.4rem);line-height:1.4;color:rgba(255,255,255,.5)}
+.is-in .cost-tm li{opacity:1;translate:none}
+
+/* финал — фото команды справа, растворяется в карточку влево (затемнение — многоточечный спад), текст и кнопки слева */
+.cost-end{position:relative;min-height:46rem;margin-top:1.6rem;overflow:hidden;border:1px solid rgba(255,255,255,.09);border-radius:1.3rem;background:#0e0d0c;
+  opacity:0;translate:0 3rem;transition:opacity 1s ease,translate 1.2s var(--out)}
+.cost-end.is-in{opacity:1;translate:none}
+.cost-eph{position:absolute;top:0;right:0;bottom:0;width:64%;margin:0;background:#16130f}
+.cost-eph img{width:100%;height:100%;object-fit:cover;object-position:62% 40%;scale:1.06;transition:scale 2.4s var(--out) .2s}
+.cost-end.is-in .cost-eph img{scale:1}
+.cost-eph::after{content:"";position:absolute;inset:0;
+  background:linear-gradient(90deg,#0e0d0c 0%,rgba(14,13,12,.9) 12%,rgba(14,13,12,.62) 26%,rgba(14,13,12,.3) 42%,rgba(14,13,12,.1) 58%,rgba(14,13,12,0) 74%),
+    linear-gradient(0deg,rgba(14,13,12,.5),rgba(14,13,12,0) 40%)}
+.cost-et{position:relative;z-index:1;display:flex;flex-direction:column;justify-content:center;min-height:46rem;max-width:58rem;padding:6rem 0 6rem 6rem}
+.cost-et h3{margin:0;font:500 4.5rem/1.06 "Inter Tight",sans-serif;letter-spacing:-.09rem;color:#fff}
+.cost-et h3 span{color:rgba(255,255,255,.5)}
+.cost-et p{max-width:44rem;margin:2.4rem 0 0;font-size:max(13px,1.6rem);line-height:1.45;color:rgba(255,255,255,.66)}
+.cost-act{display:flex;align-items:center;flex-wrap:wrap;gap:2rem 3.6rem;margin-top:4.4rem}
+.pill.cost-go{width:auto;padding:0 max(28px,4.4rem)}
+.cost-back{all:unset;cursor:pointer;font:400 max(13px,1.5rem)/1.35 "Inter Tight",sans-serif;color:rgba(255,255,255,.62);
+  text-decoration:underline;text-decoration-thickness:1px;text-underline-offset:.32em;text-decoration-color:rgba(255,255,255,.3);transition:color .3s,text-decoration-color .3s}
+.cost-back:hover{color:#fff;text-decoration-color:var(--acc)}
+.cost-back:focus-visible{outline:1px solid rgba(255,255,255,.5);outline-offset:4px}
+/* фото окна лежат в <picture> (у ПК свои кадры); сам picture не рисуем — img остаётся ребёнком figure */
+.cost picture{display:contents}
+
+/* ── ПК: обложка и финал во всю ширину листа ──
+   Шапка — первый экран листа: кадр съёмки (трое за ноутбуком) во всю ширину, вопрос крупно по центру
+   на мраморной стене над головами, низ кадра растворяется в фон листа (спад по многим точкам).
+   Финал — Кольцов и Мордвов за разговором, тоже во всю ширину: текст и кнопки справа на мраморе, над людьми,
+   верх кадра выходит из фона листа. Ширина листа без полосы прокрутки — 100cqw (контейнер — .cost-sc),
+   колонка 120rem посередине. Кадры отстают от прокрутки: --cy и --ep считает blocks.js.
+   Всё выше — основа телефона (mobile.css), поэтому правила ПК только здесь */
+@media (min-width:901px){
+  .cost-sc{container-type:inline-size}
+  .cost-in{padding:0}
+  .cost-glow{display:none}
+
+  /* --u — rem, но не больше 1/96 высоты окна: на широких и низких экранах (2560×1080) текст обложки и финала
+     растёт по высоте, а не по ширине, и не наезжает на людей в кадре */
+  .cost-head,.cost-end{--u:min(1rem,1.04svh)}
+  .cost-head{--cov:max(54rem,calc(100svh - max(16px,2.8rem) - 5rem));position:relative;isolation:isolate;display:block;height:var(--cov);
+    margin:0 calc(60rem - 50cqw);padding:calc(var(--cov) * .12) calc(50cqw - 60rem) 0;overflow:hidden;text-align:center}
+  .cost-head::before,.cost-head::after{content:"";position:absolute;left:0;right:0;z-index:-1;pointer-events:none}
+  .cost-head::before{top:0;height:62%;
+    background:radial-gradient(46% 58% at 50% 40%,rgba(9,7,6,.46),rgba(9,7,6,.2) 52%,rgba(9,7,6,0) 78%),
+      linear-gradient(180deg,rgba(10,10,10,.55) 0%,rgba(10,10,10,.3) 10%,rgba(10,10,10,.12) 22%,rgba(10,10,10,0) 36%)}
+  .cost-head::after{bottom:0;height:40%;
+    background:linear-gradient(180deg,rgba(10,10,10,0) 0%,rgba(10,10,10,.04) 15%,rgba(10,10,10,.14) 30%,rgba(10,10,10,.32) 46%,
+      rgba(10,10,10,.56) 62%,rgba(10,10,10,.8) 78%,rgba(10,10,10,.95) 91%,#0a0a0a 100%)}
+  .cost-hl{position:relative;translate:0 calc(var(--cy,0) * .2px);opacity:calc(1 - var(--cy,0) / 650)}
+  .cost-hl .in-ey{justify-content:center}
+  .cost-hl .in-ey::after{content:"";flex:none;width:1.7rem;height:1px;margin-left:-.54rem;background:var(--acc)}
+  .cost-h{margin-top:calc(2.6 * var(--u));font-size:calc(13 * var(--u));line-height:.96;letter-spacing:-.04em;text-shadow:0 0 8rem rgba(8,6,4,.4)}
+  .cost-lead{max-width:calc(62 * var(--u));margin:calc(3.4 * var(--u)) auto 0;font-size:max(15px,calc(2 * var(--u)));line-height:1.45;color:rgba(255,255,255,.8);
+    text-shadow:0 0 2.4rem rgba(8,6,4,.7)}
+  .cost-ph{position:absolute;inset:0;z-index:-2;height:auto;margin:0;border-radius:0;background:#16130f}
+  .cost-ph img{position:absolute;left:0;top:0;object-position:50% 60%;clip-path:none;opacity:0;scale:1.08;
+    translate:0 calc(var(--cy,0) * .42px);transition:opacity 1.4s ease,scale 3.2s var(--out)}
+  .cost.is-open .cost-ph img{opacity:1;scale:1;transition-delay:.15s}
+  .cost-head+.cost-sec{border-top-color:transparent}
+
+  .cost-end{--endh:max(56rem,calc(100svh - max(16px,2.8rem)));display:block;min-height:var(--endh);margin:0 calc(60rem - 50cqw);
+    padding:0 calc(50cqw - 60rem);border:0;border-radius:0;background:#0a0a0a;isolation:isolate;opacity:1;translate:none}
+  .cost-eph{position:absolute;inset:0;z-index:-2;width:auto;margin:0;overflow:hidden;background:#16130f}
+  .cost-eph img{position:absolute;left:0;top:-12%;height:112%;object-position:50% 52%;scale:1.1;
+    translate:0 calc((1 - var(--ep,1)) * 10.7%);transition:scale 2.8s var(--out) .1s}
+  .cost-end.is-in .cost-eph img{scale:1}
+  .cost-eph::after{background:
+    linear-gradient(180deg,#0a0a0a 0%,rgba(10,10,10,.86) 7%,rgba(10,10,10,.6) 15%,rgba(10,10,10,.32) 25%,rgba(10,10,10,.12) 36%,rgba(10,10,10,0) 48%),
+    radial-gradient(40% 52% at 73% 38%,rgba(9,7,6,.46),rgba(9,7,6,.18) 55%,rgba(9,7,6,0) 80%)}
+  .cost-et{display:block;width:calc(62 * var(--u));min-height:0;max-width:none;margin-left:58rem;padding:calc(var(--endh) * .13) 0 0}
+  .cost-et h3{font-size:calc(5.6 * var(--u));line-height:1.02;letter-spacing:-.03em;text-shadow:0 0 5rem rgba(8,6,4,.45)}
+  .cost-et h3 span{color:rgba(255,255,255,.6)}
+  .cost-et p{max-width:calc(50 * var(--u));margin-top:calc(2.8 * var(--u));font-size:max(14px,calc(1.8 * var(--u)));color:rgba(255,255,255,.8);text-shadow:0 0 2rem rgba(8,6,4,.7)}
+  .cost-act{margin-top:calc(4.4 * var(--u))}
+  .pill.cost-go{height:max(46px,calc(5.6 * var(--u)));padding:0 max(28px,calc(4.4 * var(--u)));font-size:max(15px,calc(1.7 * var(--u)))}
+  .cost-back{font-size:max(13px,calc(1.5 * var(--u)));color:rgba(255,255,255,.75)}
+  .cost-et>*{opacity:0;translate:0 2.4rem;transition:opacity 1s ease,translate 1.2s var(--out)}
+  .cost-end.is-in .cost-et>*{opacity:1;translate:none}
+  .cost-end.is-in .cost-et>:nth-child(2){transition-delay:.12s}
+  .cost-end.is-in .cost-et>:nth-child(3){transition-delay:.24s}
+}
+
+@media (prefers-reduced-motion:reduce){
+  .cost-sheet,.cost.is-open .cost-sheet,.cost-dim{transition:none}
+  .cost-hl>*,.cost-ph img,.cost-sl,.cost-sr,.cost-ms li,.cost-wide,.cost-tm li,.cost-end,.cost-eph img,.cost-et>*,.cost-hl,
+  .cost-p span,.cost-p b,.cost-p::before,.cost-p::after,.cost-p>i,.cost-bar i{opacity:1;translate:none;filter:none;transform:none;scale:1;clip-path:none;transition:none}
+  .co-cost.is-ping::after{animation:none}
 }
 
 /* ═════════ 5. Эксперты (кадр «6» макета, узлы 49:56–49:246) ═════════
@@ -656,6 +908,11 @@ html{font-size:max(5px,min(calc(100vw / 180),calc(100vh / 80)),min(7px,calc((100
 .ap-agree a:hover{color:#fff}
 .ap-agree.is-bad{color:#ff8a5c}
 .ap-agree.is-bad i{border-color:#ff8a5c}
+/* ссылка на политику — отдельно от галочки: ознакомление с политикой не равно согласию (152-ФЗ) */
+.ap-pol,.ap-send .ap-pol{margin:-1.2rem 0 2rem calc(max(14px,1.8rem) + 1rem);font-size:max(10px,1.25rem);line-height:1.4;color:rgba(255,255,255,.42);text-wrap:pretty}
+.ap-pol a{color:inherit;text-decoration:underline;text-underline-offset:.15em;text-decoration-thickness:1px;transition:color .3s}
+.ap-pol a:hover{color:#fff}
+.co-sum .ap-agree{margin-bottom:1.6rem}
 .ap-ok{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:center;gap:2rem;
   opacity:0;visibility:hidden;transition:opacity .8s ease,visibility 0s .8s}
 .ap-ok b{font:500 4.5rem/1.06 "Inter Tight",sans-serif;letter-spacing:-.09rem}
@@ -743,7 +1000,7 @@ html{font-size:max(5px,min(calc(100vw / 180),calc(100vh / 80)),min(7px,calc((100
 .ap-ccsel{position:absolute;inset:-.6rem -.4rem;width:auto;opacity:0;cursor:pointer;font-size:16px;-webkit-appearance:none;appearance:none}
 
 /* плашка про cookies: одна строка внизу слева, после «Хорошо» больше не показывается (blocks.js) */
-.ck{position:fixed;left:2.4rem;bottom:2.4rem;z-index:60;display:flex;align-items:center;gap:2rem;max-width:min(62rem,calc(100vw - 32px));padding:1.4rem 1.4rem 1.4rem 2.2rem;background:rgba(16,16,16,.92);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);border:1px solid rgba(255,255,255,.1);border-radius:1.6rem;box-shadow:0 1rem 4rem rgba(0,0,0,.45);opacity:0;transform:translateY(1.2rem);transition:opacity .5s var(--out),transform .5s var(--out)}
+.ck{position:fixed;left:2.4rem;bottom:2.4rem;z-index:60;display:flex;align-items:center;gap:2rem;max-width:min(80rem,calc(100vw - 32px));padding:1.4rem 1.4rem 1.4rem 2.2rem;background:rgba(16,16,16,.92);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);border:1px solid rgba(255,255,255,.1);border-radius:1.6rem;box-shadow:0 1rem 4rem rgba(0,0,0,.45);opacity:0;transform:translateY(1.2rem);transition:opacity .5s var(--out),transform .5s var(--out)}
 .ck[hidden]{display:none}
 .ck.is-on{opacity:1;transform:none}
 .ck p{margin:0;font-size:max(12px,1.35rem);line-height:1.45;color:rgba(255,255,255,.66)}
@@ -751,3 +1008,6 @@ html{font-size:max(5px,min(calc(100vw / 180),calc(100vh / 80)),min(7px,calc((100
 .ck a:hover{color:#fff}
 .ck-ok{flex:none;height:max(36px,4.2rem);padding:0 2.4rem;border:0;border-radius:5rem;background:var(--acc);color:#fff;cursor:pointer;font:400 max(13px,1.5rem)/1 "Inter Tight",sans-serif;transition:background-color .3s}
 .ck-ok:hover,.ck-ok:focus-visible{background:#dcb27a}
+.ck-btns{display:flex;flex-direction:column;gap:.8rem;flex:none}
+.ck-no{flex:none;height:max(36px,4.2rem);padding:0 2.4rem;border:1px solid rgba(255,255,255,.22);border-radius:5rem;background:none;color:rgba(255,255,255,.8);cursor:pointer;font:400 max(13px,1.5rem)/1 "Inter Tight",sans-serif;transition:border-color .3s,color .3s}
+.ck-no:hover,.ck-no:focus-visible{border-color:rgba(255,255,255,.6);color:#fff}

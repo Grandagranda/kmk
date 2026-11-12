@@ -273,6 +273,96 @@ html.is-menu .mnav-links a:nth-child(6){transition-delay:.25s}
 .co-ok{padding:2.6rem 2rem}
 .co-ok b{font-size:2.8rem}
 .co-ok p{font-size:1.5rem}
+/* «Дорого ли это?» под ценой */
+.pill.co-cost{gap:1.1rem;height:5.1rem;margin-top:2rem;padding:0 2rem 0 .6rem;font-size:1.6rem}
+.co-cost i{width:3.9rem;height:3.9rem;min-width:0;min-height:0;font-size:1.6rem}
+.co-cost .pill-ar{width:1.5rem;height:1.5rem;min-width:0;min-height:0}
+.co-cost+.co-sale{margin-top:1.6rem}
+
+/* ═════════ Окно «Дорого ли это?» ═════════
+   Лист на весь экран, сверху полоска затемнённого сайта. Колонка 320, разделы в одну колонку: номер, заголовок,
+   фраза — под ними цифры. Цены на человека — строками под общей ценой, показатели — 2×2,
+   лесенка — вертикальная линия ступеней, финал — фото сверху, текст и кнопка под ним */
+.cost-sheet{top:4.8rem;border-radius:1.6rem 1.6rem 0 0}
+.cost-sheet::before{height:1.6rem}
+.cost-x{top:1.2rem;right:1.2rem;width:4.4rem;height:4.4rem;min-width:0;min-height:0}
+.cost-x::before,.cost-x::after{width:1.6rem;min-width:0}
+.cost-in{width:32rem;padding:3.2rem 0 calc(2.4rem + env(safe-area-inset-bottom,0px))}
+.cost-head{display:block;padding-bottom:4rem}
+.cost-h{margin-top:1.4rem;font-size:4rem;letter-spacing:-.12rem}
+.cost-lead{max-width:none;margin-top:1.6rem;font-size:1.5rem}
+.cost-ph{height:auto;aspect-ratio:320/220;margin-top:2.8rem;border-radius:.8rem}
+
+.cost-sec{display:block;padding:3.6rem 0 4.4rem;border-top-color:rgba(255,255,255,.16)}
+.cost-n{font-size:1.3rem}
+.cost-sl h3{margin-top:1rem;font-size:2.4rem;letter-spacing:-.048rem}
+.cost-sl p{max-width:none;margin-top:1rem;font-size:1.4rem}
+.cost-sr{margin-top:2.8rem}
+.cost-cap{margin-bottom:1.6rem;font-size:1.1rem}
+
+.cost-figs{display:block}
+.cost-fig{padding:0;border-left:0}
+.cost-fig small{font-size:1.1rem}
+.cost-fig b{margin-top:1.2rem;font-size:4.8rem;letter-spacing:-.096rem}
+.cost-fig sup{font-size:1.5rem}
+.cost-fig p{margin-top:1rem;font-size:1.3rem}
+.cost-fig+.cost-fig{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;column-gap:1.2rem;margin-top:1.8rem;padding-top:1.8rem;border-top:1px solid rgba(255,255,255,.14)}
+.cost-fig+.cost-fig small{grid-column:1;grid-row:1}
+.cost-fig+.cost-fig p{grid-column:1;grid-row:2;margin-top:.4rem}
+.cost-fig+.cost-fig b{grid-column:2;grid-row:1/span 2;margin-top:0;font-size:2.8rem;letter-spacing:-.056rem}
+.cost-fig+.cost-fig em{margin:0 .5rem .3rem 0;font-size:1.3rem}
+.cost-fig+.cost-fig sup{margin:.2rem 0 0 .3rem;font-size:1.2rem}
+.cost-chip{height:3.6rem;margin-top:2.8rem;padding:0 1.6rem 0 1.2rem;font-size:1.3rem}
+.cost-chip svg{width:1.8rem;height:1.8rem;min-width:0;min-height:0}
+
+.cost-g{grid-template-columns:minmax(0,1fr);row-gap:1rem}
+.cost-g+.cost-g{margin-top:3.2rem}
+.cost-gn{font-size:5.6rem;letter-spacing:-.112rem}
+.cost-gn em.is-w{margin:0 .6rem .5rem 0;font-size:1.6rem}
+.cost-gn sup{font-size:2rem}
+.cost-gt strong{font-size:1.7rem}
+.cost-gt p{margin-top:.4rem;font-size:1.4rem}
+.cost-bar{height:.5rem;min-height:0;margin-top:.6rem}
+.cost-note{gap:1rem;margin-top:2.8rem;font-size:1.2rem}
+.cost-note i{width:1.8rem;height:1.8rem;min-width:0;min-height:0;font-size:1rem}
+
+.cost-ms{grid-template-columns:1fr 1fr;row-gap:2.8rem}
+.cost-m{padding:0 1.2rem 0 1.6rem}
+.cost-m:nth-child(odd){padding-left:0;border-left:0}
+.cost-m svg,.cost-wide svg,.cost-tm svg{width:3rem;height:3rem;min-width:0;min-height:0}
+.cost-m b{margin-top:1.4rem;font-size:1.7rem}
+.cost-m p{margin-top:.5rem;font-size:1.3rem}
+.cost-wide{grid-template-columns:auto minmax(0,1fr);column-gap:1.4rem;row-gap:.4rem;margin-top:3.2rem;padding:1.8rem;border-radius:1rem}
+.cost-wide svg{grid-row:1/span 2}
+.cost-wide b{font-size:1.7rem}
+.cost-wide p{grid-column:2;padding-left:0;border-left:0;font-size:1.4rem}
+
+/* лесенка на телефоне — вертикальная линия: точка у каждой ступени, линия дорисовывается сверху вниз */
+.cost-path{display:block;padding-left:2.6rem}
+.cost-p{padding:0 0 2.4rem}
+.cost-p:last-child{padding-bottom:0}
+.cost-p::before{left:-2.6rem;right:auto;top:.8rem;bottom:-.8rem;width:1px;height:auto;transform:scaleY(0);transform-origin:50% 0}
+.cost-p:last-child::before{display:none}
+.cost-p+.cost-p::after{display:none}
+.cost-p>i{left:-3rem;top:.4rem;width:.9rem;height:.9rem;min-width:0;min-height:0}
+.cost-p span{font-size:1.3rem}
+.cost-p b{margin-top:.4rem;font-size:1.7rem}
+.cost-cap2{margin-top:4rem}
+.cost-tm{grid-template-columns:1fr;row-gap:2.2rem}
+.cost-tm li{column-gap:1.4rem;padding:0;border-left:0}
+.cost-tm b{font-size:1.7rem}
+.cost-tm p{font-size:1.4rem}
+
+.cost-end{min-height:0;margin-top:.8rem;border-radius:1rem}
+.cost-eph{position:relative;width:auto;aspect-ratio:320/200}
+.cost-eph img{object-position:60% 40%}
+.cost-eph::after{background:linear-gradient(0deg,#0e0d0c 0%,rgba(14,13,12,.72) 20%,rgba(14,13,12,.25) 45%,rgba(14,13,12,0) 65%)}
+.cost-et{min-height:0;max-width:none;margin-top:-2rem;padding:0 2rem 2.6rem}
+.cost-et h3{font-size:2.6rem;letter-spacing:-.052rem}
+.cost-et p{margin-top:1.4rem;font-size:1.4rem}
+.cost-act{flex-direction:column;align-items:stretch;gap:1.8rem;margin-top:2.4rem}
+.pill.cost-go{width:100%;padding:0}
+.cost-back{align-self:center;font-size:1.4rem}
 
 /* панель итога: появляется, когда отмечена хотя бы одна тема, темы на экране, а смета ещё ниже (blocks.js) */
 .co-bar{display:flex;align-items:center;gap:1.2rem;position:fixed;left:1.2rem;right:1.2rem;bottom:calc(1.2rem + env(safe-area-inset-bottom,0px));z-index:45;
@@ -411,4 +501,6 @@ html.is-menu .mnav-links a:nth-child(6){transition-delay:.25s}
 /* плашка cookies на телефоне: во всю ширину с полями 16 px, кнопка под текстом */
 .ck{left:16px;right:16px;bottom:16px;max-width:none;flex-direction:column;align-items:stretch;gap:1.4rem;padding:1.8rem;border-radius:1.8rem}
 .ck p{font-size:1.35rem}
-.ck-ok{height:4.4rem;font-size:1.5rem}
+.ck-ok,.ck-no{height:4.4rem;font-size:1.5rem}
+.ck p{font-size:1.25rem}
+.ap-pol,.ap-send .ap-pol{margin:-1rem 0 1.8rem 2.8rem;font-size:1.2rem;white-space:normal}

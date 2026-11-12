@@ -38,7 +38,7 @@
 <link rel="icon" href="img/favicon-120.png" type="image/png" sizes="120x120">
 <link rel="apple-touch-icon" href="img/apple-touch-icon.png">
 <link rel="stylesheet" href="fonts/fonts.css">
-<link rel="stylesheet" href="blocks.css?v=b7798427">
+<link rel="stylesheet" href="blocks.css?v=e46b7899">
 <style>
 /* ─────────── кадр «70», все координаты из Figma ─────────── */
 *,*::before,*::after{box-sizing:border-box}
@@ -291,7 +291,7 @@ a:hover .roll>span,a:focus-visible .roll>span{transform:translateY(-1.35em)}
 }
 
 </style>
-<link rel="stylesheet" href="mobile.css?v=03a26d3f" media="(max-width:900px)">
+<link rel="stylesheet" href="mobile.css?v=f453d104" media="(max-width:900px)">
 </head>
 <body>
 <div class="opening">
@@ -724,7 +724,7 @@ a:hover .roll>span,a:focus-visible .roll>span{transform:translateY(-1.35em)}
       </figure>
     </div>
 
-    <form class="co-form" action="send.php" method="post" novalidate data-day="150000" data-d2="" data-d3="">
+    <form class="ym-hide-content co-form" action="send.php" method="post" novalidate data-day="150000" data-d2="" data-d3="">
       <input type="hidden" name="src" value="corp">
       <div class="co-list">
         <p class="co-legend" aria-hidden="true"><span>Отметьте темы</span><span>Длительность</span><span>Цена за&nbsp;группу</span></p>
@@ -806,13 +806,17 @@ a:hover .roll>span,a:focus-visible .roll>span{transform:translateY(-1.35em)}
           <p class="co-sum-n is-empty" aria-live="polite">Отметьте темы — посчитаем дни и&nbsp;стоимость</p>
           <p class="co-total"><b class="co-v">150&nbsp;000</b><sup>₽</sup></p>
           <p class="co-calc" aria-live="polite">день интенсива для&nbsp;всей группы</p>
+          <!-- «Дорого ли это?» — прямо под ценой: вопрос возникает, когда видят цифру. Вторая кнопка сметы — золотой контур
+               во всю ширину (главная «Обсудить программу» — залитая). Открывает окно .cost ниже -->
+          <button class="pill co-cost" type="button" aria-haspopup="dialog" aria-controls="cost" aria-label="Дорого ли это?" data-preview-click><i aria-hidden="true">?</i><span class="co-cost-t">Дорого ли это?</span><span class="pill-ar" aria-hidden="true"><svg viewBox="0 0 16 16"><path d="M1 8h13M9 3l5 5-5 5"/></svg><svg viewBox="0 0 16 16"><path d="M1 8h13M9 3l5 5-5 5"/></svg></span></button>
           <p class="co-sale"><i aria-hidden="true">%</i><span>От&nbsp;двух тем&nbsp;— скидка</span></p>
           <div class="co-fields">
       <label class="ap-f"><input name="f[name]" required autocomplete="name" placeholder=" "><span>Имя</span></label>
       <label class="ap-f ap-tel"><span class="ap-cc"><svg viewBox="0 2.5 18 13" aria-hidden="true"><path fill="#EEE" d="M16 2.5H2a2 2 0 0 0-2 2v2h18v-2a2 2 0 0 0-2-2z"/><path fill="#22408C" d="M0 6.5h18v5H0z"/><path fill="#CE2028" d="M18 13.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2h18z"/></svg><i aria-hidden="true"></i><b aria-hidden="true">+7</b><select class="ap-ccsel" aria-label="Код страны"><option value="ru" selected>Россия +7</option><option value="by">Беларусь +375</option><option value="kz">Казахстан +7</option></select></span><input name="f[phone]" type="tel" inputmode="tel" data-cc="+7" required autocomplete="tel-national" placeholder="(000) 000 00 00"><span class="ap-sr">Телефон</span></label>
           </div>
           <label class="ap-hp" aria-hidden="true">Не заполняйте это поле <input name="website" tabindex="-1" autocomplete="off"></label>
-          <label class="ap-agree"><input type="checkbox" name="consent" value="Да"><i aria-hidden="true"></i><span>Даю <a href="docs/soglasie.html" target="_blank">согласие на&nbsp;обработку персональных данных</a></span></label>
+          <label class="ap-agree"><input type="checkbox" name="consent" value="Да" required><i aria-hidden="true"></i><span>Даю <a href="docs/soglasie.html" target="_blank">согласие на&nbsp;обработку персональных данных</a></span></label>
+          <p class="ap-pol">Как мы обрабатываем данные&nbsp;— в&nbsp;<a href="docs/privacy.html" target="_blank">политике обработки персональных данных</a></p>
           <button class="pill co-btn" type="submit"><span data-roll>Обсудить программу</span></button>
           <p class="co-tel">Или позвоните: <a href="tel:+79991980055">+7 (999) 198-00-55</a></p>
           <p class="ap-err co-err" aria-live="assertive">Не получилось отправить заявку. Проверьте интернет и&nbsp;попробуйте ещё раз или напишите нам: <a href="mailto:kmkschool@yandex.ru">kmkschool@yandex.ru</a></p>
@@ -1003,7 +1007,7 @@ a:hover .roll>span,a:focus-visible .roll>span{transform:translateY(-1.35em)}
       </div>
     </div>
 
-    <form class="ap-form" action="send.php" method="post" novalidate>
+    <form class="ym-hide-content ap-form" action="send.php" method="post" novalidate>
       <fieldset class="ap-pick ap-int">
         <legend>Что вас интересует</legend>
         <label><input type="checkbox" name="i[]" value="Экспертная оптометрия. I уровень"><span>I · Экспертная оптометрия</span></label>
@@ -1015,7 +1019,8 @@ a:hover .roll>span,a:focus-visible .roll>span{transform:translateY(-1.35em)}
       <label class="ap-f"><input name="f[name]" required autocomplete="name" placeholder=" "><span>Имя</span></label>
       <label class="ap-f ap-tel"><span class="ap-cc"><svg viewBox="0 2.5 18 13" aria-hidden="true"><path fill="#EEE" d="M16 2.5H2a2 2 0 0 0-2 2v2h18v-2a2 2 0 0 0-2-2z"/><path fill="#22408C" d="M0 6.5h18v5H0z"/><path fill="#CE2028" d="M18 13.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2h18z"/></svg><i aria-hidden="true"></i><b aria-hidden="true">+7</b><select class="ap-ccsel" aria-label="Код страны"><option value="ru" selected>Россия +7</option><option value="by">Беларусь +375</option><option value="kz">Казахстан +7</option></select></span><input name="f[phone]" type="tel" inputmode="tel" data-cc="+7" required autocomplete="tel-national" placeholder="(000) 000 00 00"><span class="ap-sr">Телефон</span></label>
       <div class="ap-send">
-        <label class="ap-agree"><input type="checkbox" name="consent" value="Да"><i aria-hidden="true"></i><span>Даю <a href="docs/soglasie.html" target="_blank">согласие на&nbsp;обработку персональных данных</a></span></label>
+        <label class="ap-agree"><input type="checkbox" name="consent" value="Да" required><i aria-hidden="true"></i><span>Даю <a href="docs/soglasie.html" target="_blank">согласие на&nbsp;обработку персональных данных</a></span></label>
+          <p class="ap-pol">Как мы обрабатываем данные&nbsp;— в&nbsp;<a href="docs/privacy.html" target="_blank">политике обработки персональных данных</a></p>
         <button class="ap-btn" type="submit"><span data-roll>Отправить заявку</span></button>
       </div>
       <div class="ap-ok" aria-live="polite"><b>Спасибо, заявка у&nbsp;нас.</b><p>Скоро свяжемся и&nbsp;расскажем подробности.</p></div>
@@ -1037,7 +1042,7 @@ a:hover .roll>span,a:focus-visible .roll>span{transform:translateY(-1.35em)}
       <p>ИП Кольцов Александр Алексеевич</p>
       <p>ИНН: 781021117107</p>
       <p>ОГРНИП: 324470400110308</p>
-      <p class="ft-m-docs"><a href="docs/privacy.html" target="_blank">Политика конфиденциальности</a><br><a href="docs/oferta.html" target="_blank">Публичная оферта</a></p>
+      <p class="ft-m-docs"><a href="docs/privacy.html" target="_blank">Политика обработки персональных данных</a><br><a href="docs/soglasie.html" target="_blank">Согласие на&nbsp;обработку персональных данных</a><br><a href="docs/oferta.html" target="_blank">Публичная оферта</a><br><a href="#cookies" data-ck-open>Настройки cookies</a></p>
     </div>
   </div>
 </footer>
@@ -1047,13 +1052,113 @@ a:hover .roll>span,a:focus-visible .roll>span{transform:translateY(-1.35em)}
   <button class="reel-close kv-close" type="button" aria-label="Закрыть">×</button>
 </div>
 
+<!-- ═════════ Окно «Дорого ли это?» ═════════
+     Открывает кнопка под ценой в смете «Для компаний» и ссылка …/#dorogo. Лист выезжает снизу поверх страницы,
+     страница под ним стоит — закрыли, и посетитель там же, где был. Разделы одной сеткой: слева номер, заголовок
+     и одна фраза, справа цифры и схема. Цена дня и цена на человека — из раздела «Для компаний» (render.js costPrep).
+     Фото грузятся, когда смета подъезжает к экрану (blocks.js) -->
+<div class="cost" id="cost" role="dialog" aria-modal="true" aria-labelledby="cost-h">
+  <div class="cost-dim" data-cost-x></div>
+  <div class="cost-sheet">
+    <button class="cost-x" type="button" data-cost-x aria-label="Закрыть"></button>
+    <div class="cost-sc" tabindex="-1">
+      <img class="cost-glow" data-src="img/in/glow.webp?v=3" alt="" aria-hidden="true">
+      <div class="cost-in">
+        <header class="cost-head">
+          <div class="cost-hl">
+            <p class="in-ey"><i></i>Корпоративный интенсив</p>
+            <h2 class="cost-h" id="cost-h">Дорого ли это?</h2>
+            <p class="cost-lead">Разберём на&nbsp;цифрах: во&nbsp;что обходится день интенсива, что он&nbsp;даёт бизнесу и&nbsp;что остаётся в&nbsp;команде после обучения.</p>
+          </div>
+          <!-- на ПК — обложка во всю ширину листа (кадр из оригинала 9P9A1115, 1920/3200), на телефоне — прежний вертикальный кадр -->
+          <figure class="cost-ph"><picture><source media="(min-width:901px)" data-srcset="img/co/cost-cover-1920.webp?v=1 1920w, img/co/cost-cover.webp?v=1 3200w" sizes="100vw"><img data-src="img/co/team.webp?v=1" alt="Александр Кольцов и&nbsp;Алексей Мордвов за&nbsp;рабочим обсуждением" decoding="async"></picture></figure>
+        </header>
 
-<div class="ck" role="region" aria-label="Уведомление о cookies" hidden><p>Мы используем cookies и&nbsp;Яндекс&nbsp;Метрику, чтобы сайт работал удобнее. Подробнее — в&nbsp;<a href="docs/privacy.html" target="_blank">политике конфиденциальности</a>.</p><button class="ck-ok" type="button">Хорошо</button></div>
+        <section class="cost-sec cost-price" data-cr aria-labelledby="cost-s1">
+          <div class="cost-sl"><span class="cost-n">01</span><h3 id="cost-s1">Стоимость</h3><p>Цена — за&nbsp;день работы со&nbsp;всей группой, а&nbsp;не&nbsp;за&nbsp;место в&nbsp;зале.</p></div>
+          <div class="cost-sr">
+            <div class="cost-figs">
+              <div class="cost-fig"><small>Вся группа</small><b><span>150&nbsp;000</span><sup>₽</sup></b><p>за&nbsp;день интенсива</p></div>
+              <div class="cost-fig"><small>Рефракция</small><b><em>от</em><span>15&nbsp;000</span><sup>₽</sup></b><p>на&nbsp;человека в&nbsp;день · группа до&nbsp;10&nbsp;человек</p></div>
+              <div class="cost-fig"><small>Медицинский сервис</small><b><em>от</em><span>7&nbsp;500</span><sup>₽</sup></b><p>на&nbsp;человека в&nbsp;день · группа до&nbsp;20&nbsp;человек</p></div>
+            </div>
+            <p class="cost-chip"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M2 12.5L16 6.5l14 6-14 6z"/><path d="M8.5 15.3v5.9c2.3 2.2 4.8 3.3 7.5 3.3s5.2-1.1 7.5-3.3v-5.9"/><path d="M28 13.4v7.1"/></svg>Инвестиция в&nbsp;компетенции команды</p>
+          </div>
+        </section>
+
+        <section class="cost-sec cost-grow" data-cr aria-labelledby="cost-s2">
+          <div class="cost-sl"><span class="cost-n">02</span><h3 id="cost-s2">Опыт КМК с&nbsp;партнёрами</h3><p>Насколько вырастет результат, зависит от&nbsp;того, с&nbsp;какого уровня стартует команда.</p></div>
+          <div class="cost-sr">
+            <div class="cost-g" style="--w:15.0%;--i:0">
+              <b class="cost-gn"><em>~</em><span class="cost-num"><span data-to="30">30</span><span class="cost-ghost" aria-hidden="true">30</span></span><sup>%</sup></b>
+              <div class="cost-gt"><strong>Высокий стартовый уровень</strong><p>Потенциал дополнительного роста</p></div>
+              <i class="cost-bar" aria-hidden="true"><i></i></i>
+            </div>
+            <div class="cost-g" style="--w:100.0%;--i:1">
+              <b class="cost-gn"><em class="is-w">до</em><span class="cost-num"><span data-to="200">200</span><span class="cost-ghost" aria-hidden="true">200</span></span><sup>%</sup></b>
+              <div class="cost-gt"><strong>Невысокий стартовый уровень</strong><p>При грамотном внедрении инструментов</p></div>
+              <i class="cost-bar" aria-hidden="true"><i></i></i>
+            </div>
+            <p class="cost-note"><i aria-hidden="true">i</i><span>Показатели основаны на&nbsp;опыте работы с&nbsp;партнёрами и&nbsp;не&nbsp;являются гарантией результата.</span></p>
+          </div>
+        </section>
+
+        <section class="cost-sec cost-fin" data-cr aria-labelledby="cost-s3">
+          <div class="cost-sl"><span class="cost-n">03</span><h3 id="cost-s3">Финансовый результат</h3><p>Интенсив помогает увеличить выручку за&nbsp;счёт более сложных и&nbsp;высокомаржинальных заказов.</p></div>
+          <div class="cost-sr">
+            <ul class="cost-ms">
+              <li class="cost-m" style="--i:0"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M4 27.5h24"/><path d="M7.5 27.5v-5M13 27.5v-8.5M18.5 27.5V16M24 27.5V12"/><path d="M6 15.5l6.5-5.5 4 3L25 5.5"/><path d="M20.5 5.5H25V10"/></svg><b>Средний чек</b><p>Линзы и&nbsp;оправы</p></li>
+              <li class="cost-m" style="--i:1"><svg viewBox="0 0 32 32" aria-hidden="true"><circle cx="15" cy="17" r="11"/><circle cx="15" cy="17" r="6.5"/><circle cx="15" cy="17" r="2"/><path d="M15 17L26.5 5.5"/><path d="M22.5 5.5h4v4"/></svg><b>Конверсия</b><p>Общая и&nbsp;кабинета</p></li>
+              <li class="cost-m" style="--i:2"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M26 13.5A10.5 10.5 0 0 0 7.2 9.4"/><path d="M6.5 4.5v5h5"/><path d="M6 18.5a10.5 10.5 0 0 0 18.8 4.1"/><path d="M25.5 27.5v-5h-5"/></svg><b>Возвращаемость</b><p>Повторные обращения</p></li>
+              <li class="cost-m" style="--i:3"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M4 8.5A3 3 0 0 1 7 5.5h12a3 3 0 0 1 3 3v6.5a3 3 0 0 1-3 3h-7.5L6.5 22v-4h-.1A3 3 0 0 1 4 15z"/><path d="M25.5 11h.5a2.5 2.5 0 0 1 2.5 2.5v6.5A2.5 2.5 0 0 1 26 22.5h-.5v4l-5-4h-6"/></svg><b>Рекомендации</b><p>Рост «сарафанного радио»</p></li>
+            </ul>
+            <div class="cost-wide"><svg viewBox="0 0 32 32" aria-hidden="true"><rect x="2.5" y="12" width="11.5" height="9" rx="4.5"/><rect x="18" y="12" width="11.5" height="9" rx="4.5"/><path d="M14 15.3c1.3-1.1 2.7-1.1 4 0"/><path d="M2.5 15.5L1.5 10.5M29.5 15.5l1-5"/></svg><b>Сложные заказы</b><p>Больше возможностей для&nbsp;экспертной коррекции</p></div>
+          </div>
+        </section>
+
+        <section class="cost-sec cost-team" data-cr aria-labelledby="cost-s4">
+          <div class="cost-sl"><span class="cost-n">04</span><h3 id="cost-s4">Стратегические преимущества и&nbsp;развитие команды</h3><p>Интенсив — это не&nbsp;только про продажи. Это развитие бизнеса и&nbsp;команды на&nbsp;долгосрочную перспективу.</p></div>
+          <div class="cost-sr">
+            <p class="cost-cap">Для бизнеса</p>
+            <ol class="cost-path">
+              <li class="cost-p" style="--k:3;--i:0"><i aria-hidden="true"></i><span>01</span><b>Экспертные компетенции команды</b></li>
+              <li class="cost-p" style="--k:2;--i:1"><i aria-hidden="true"></i><span>02</span><b>Новый уровень приёма и&nbsp;коррекции</b></li>
+              <li class="cost-p" style="--k:1;--i:2"><i aria-hidden="true"></i><span>03</span><b>Статус центра коррекции зрения</b></li>
+              <li class="cost-p" style="--k:0;--i:3"><i aria-hidden="true"></i><span>04</span><b>Конкурентное преимущество и&nbsp;доверие клиентов</b></li>
+            </ol>
+            <p class="cost-cap cost-cap2">Для команды</p>
+            <ul class="cost-tm">
+              <li style="--i:0"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M10 4.5h12v7a6 6 0 0 1-12 0z"/><path d="M10 7H5.5v1.5a4.5 4.5 0 0 0 4.7 4.5M22 7h4.5v1.5a4.5 4.5 0 0 1-4.7 4.5"/><path d="M16 17.5v4.5"/><path d="M11 27.5h10l-1.2-5.5h-7.6z"/></svg><b>Мотивация</b><p>Профессиональный рост и&nbsp;профилактика выгорания</p></li>
+              <li style="--i:1"><svg viewBox="0 0 32 32" aria-hidden="true"><circle cx="16" cy="10" r="4.2"/><path d="M8.3 26c.4-4.7 3.4-7.8 7.7-7.8s7.3 3.1 7.7 7.8"/><circle cx="6.8" cy="13" r="3"/><path d="M1.8 24.5c.3-3.4 2.2-5.8 5-6.1"/><circle cx="25.2" cy="13" r="3"/><path d="M30.2 24.5c-.3-3.4-2.2-5.8-5-6.1"/></svg><b>Удержание</b><p>Возможность развиваться внутри компании</p></li>
+              <li style="--i:2"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M16 3.8l3.7 7.6 8.3 1.2-6 5.9 1.4 8.3L16 22.9l-7.4 3.9 1.4-8.3-6-5.9 8.3-1.2z"/></svg><b>Привлечение</b><p>Имидж привлекательного работодателя</p></li>
+            </ul>
+          </div>
+        </section>
+
+        <section class="cost-end" data-cr aria-labelledby="cost-s5">
+          <!-- на ПК — Кольцов и Мордвов за разговором во всю ширину листа (оригинал 9P9A1078), на телефоне — команда за столом -->
+          <figure class="cost-eph" aria-hidden="true"><picture><source media="(min-width:901px)" data-srcset="img/co/cost-end-1920.webp?v=2 1920w, img/co/cost-end.webp?v=2 3200w" sizes="100vw"><img data-src="img/co/cost-team.webp?v=1" alt="" decoding="async"></picture></figure>
+          <div class="cost-et">
+            <h3 id="cost-s5">Интенсив заканчивается.<br><span>Новые компетенции остаются в&nbsp;команде.</span></h3>
+            <p>Знания и&nbsp;подходы продолжают работать после обучения — помогают компании развивать экспертность и&nbsp;коммерческий результат.</p>
+            <div class="cost-act">
+              <button class="pill co-btn cost-go" type="button"><span data-roll>Обсудить программу</span></button>
+              <button class="cost-back" type="button" data-cost-x>Вернуться к&nbsp;расчёту</button>
+            </div>
+          </div>
+        </section>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<div class="ck" role="region" aria-label="Настройки cookies" hidden><p>Сайт использует необходимые cookies. С&nbsp;вашего согласия подключим Яндекс&nbsp;Метрику (ООО&nbsp;«Яндекс»): она учитывает cookie-идентификаторы, браузер и&nbsp;устройство, источник перехода, просмотренные страницы и&nbsp;действия на&nbsp;сайте&nbsp;— чтобы мы улучшали сайт. Cookies Метрики хранятся до&nbsp;1&nbsp;года. Изменить выбор можно в&nbsp;любой момент: «Настройки cookies» внизу страницы. Подробнее&nbsp;— в&nbsp;<a href="docs/privacy.html#s6" target="_blank">политике</a>.</p><div class="ck-btns"><button class="ck-ok" type="button" data-ck="all">Разрешить</button><button class="ck-no" type="button" data-ck="need">Только необходимые</button></div></div>
 <!-- телефон: итог программы «Для компаний» внизу экрана, пока листают темы и смета ещё ниже (blocks.js) -->
 <div class="co-bar" role="region" aria-label="Ваша программа"><p><b class="co-bar-v"></b><span class="co-bar-n"></span></p><button class="co-bar-go" type="button">К&nbsp;заявке</button></div>
 <script src="smooth-scroll.js?v=850f2b6e"></script>
 <script src="reel.js?v=60a73c42"></script>
 <script src="ui.js?v=9e04362b"></script>
-<script src="blocks.js?v=254d9836"></script>
+<script src="blocks.js?v=17ebce65"></script>
 </body>
 </html>

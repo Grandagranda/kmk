@@ -788,12 +788,20 @@
         const y = sum.getBoundingClientRect().top + scrollY - (bar ? bar.offsetHeight : 0) - 16;
         if (window.kmkScroll && window.kmkScroll.to) window.kmkScroll.to(y); else scrollTo({ top: y, behavior: 'smooth' });
       });
-      const ckOk = $('.ck-ok');
-      if (ckOk) ckOk.addEventListener('click', () => setTimeout(barCheck, 60));
+      document.querySelectorAll('.ck [data-ck]').forEach(b => b.addEventListener('click', () => setTimeout(barCheck, 600)));
     }
 
+    // первая отмеченная тема — по контуру «Дорого ли это?» один раз пробегает блик: цена появилась, вопрос рядом
+    const costBtn = $('.co-cost', co);
+    let hadN = 0;
     const paint = () => {
       const s = state();
+      if (costBtn && s.n && !hadN && !reduced) {
+        costBtn.classList.remove('is-ping');
+        void costBtn.offsetWidth;
+        costBtn.classList.add('is-ping');
+      }
+      hadN = s.n;
       elN.classList.toggle('is-empty', !s.n);
       elN.innerHTML = s.n ? label(s) : empty.n;
       run(s.n ? s.total : day);
@@ -826,6 +834,140 @@
     paint();
   }
 
+  // ── «Дорого ли это?»: окно-лист поверх страницы. Страница под ним стоит (html.is-locked), поэтому после закрытия
+  // посетитель там же, где был. Открытие добавляет в историю #dorogo: «Назад» на телефоне закрывает окно, а не уводит
+  // с сайта; по ссылке …/#dorogo окно открывается сразу (страница под ним — у сметы). Фото грузятся заранее, когда
+  // смета подъезжает к экрану. Разделы проявляются по прокрутке листа, проценты набегают от нуля ──
+  const cost = $('.cost');
+  if (cost) {
+    const HASH = '#dorogo';
+    const root = document.documentElement, sc = $('.cost-sc', cost), xBtn = $('.cost-x', cost);
+    const openers = $$('.co-cost');
+    let back = null, pushed = false;
+    // в <picture> у ПК свои кадры (source с media): сначала отдаём srcset источникам, потом src картинке —
+    // браузер выбирает один вариант, и телефон не качает обложки ПК, а ПК — вертикальные кадры телефона.
+    // Заранее, когда смета подъезжает к экрану, грузим только шапку (она видна сразу при открытии), остальное — при открытии
+    const load = box => {
+      $$('source[data-srcset]', box).forEach(s => { s.srcset = s.dataset.srcset; s.removeAttribute('data-srcset'); });
+      $$('img[data-src]', box).forEach(img => { img.src = img.dataset.src; img.removeAttribute('data-src'); });
+    };
+    const sumEl = $('.co-sum');
+    if (sumEl) new IntersectionObserver(([e], o) => { if (e.isIntersecting) { o.disconnect(); load($('.cost-head', cost) || cost); } }, { rootMargin: '600px 0px' }).observe(sumEl);
+
+    const count = el => {
+      const to = +el.dataset.to;
+      if (!to || reduced) return;
+      const t0 = performance.now(), dur = 1500 + to * 3;
+      const step = now => {
+        const p = clamp((now - t0) / dur, 0, 1);
+        el.textContent = Math.round(to * (1 - Math.pow(1 - p, 4)));
+        if (p < 1) requestAnimationFrame(step);
+      };
+      el.textContent = '0';
+      setTimeout(() => requestAnimationFrame(step), 300);
+    };
+    const seen = new IntersectionObserver(es => es.forEach(e => {
+      if (!e.isIntersecting) return;
+      seen.unobserve(e.target);
+      e.target.classList.add('is-in');
+      $$('[data-to]', e.target).forEach(count);
+    }), { root: sc, rootMargin: '0px 0px -14% 0px' });
+
+    // ПК: обложка и финал — фото во всю ширину листа, оба отстают от прокрутки (параллакс только по скроллу).
+    // --cy — сколько пикселей лист прокручен (обложка уходит медленнее текста), --ep — где финал: 1 — только
+    // показался снизу, 0 — его верх у верха листа. На телефоне фото в потоке, переменные CSS там не читает
+    const head = $('.cost-head', cost), end = $('.cost-end', cost);
+    let praf = 0;
+    const para = () => {
+      praf = 0;
+      if (reduced || isMob()) return;
+      const H = sc.clientHeight, y = sc.scrollTop;
+      if (head) head.style.setProperty('--cy', Math.min(y, H).toFixed(1));
+      if (end) {
+        const t = end.getBoundingClientRect().top - sc.getBoundingClientRect().top;
+        end.style.setProperty('--ep', clamp(t / H, 0, 1).toFixed(4));
+      }
+    };
+    sc.addEventListener('scroll', () => { if (!praf) praf = requestAnimationFrame(para); }, { passive: true });
+
+    const isOpen = () => cost.classList.contains('is-open');
+    const open = fromHistory => {
+      if (isOpen()) return;
+      load(cost);
+      back = document.activeElement;
+      sc.scrollTop = 0;
+      para();
+      cost.classList.add('is-open');
+      root.classList.add('is-locked');
+      $$('[data-cr]:not(.is-in)', cost).forEach(el => seen.observe(el));
+      // в предпросмотре админки (страница из blob:) история может быть недоступна — тогда окно просто без записи
+      if (!fromHistory) try { history.pushState({ kmkCost: 1 }, '', HASH); pushed = true; } catch (e) { pushed = false; }
+      // фокус — на прокручиваемый лист: стрелки и PageDown листают окно, Tab идёт по кнопкам внутри
+      sc.focus({ preventScroll: true });
+      if (window.ym && window.KMK_YM) window.ym(window.KMK_YM, 'reachGoal', 'cost_open');
+    };
+    const close = fromHistory => {
+      if (!isOpen()) return;
+      cost.classList.remove('is-open');
+      if (!root.classList.contains('is-menu')) root.classList.remove('is-locked');
+      if (back && back.focus && document.contains(back)) back.focus({ preventScroll: true });
+      back = null;
+      if (fromHistory) { pushed = false; return; }
+      // закрыли кнопкой: свою запись истории снимаем шагом назад; пришли по ссылке с #dorogo — просто убираем хвост адреса
+      if (pushed) { pushed = false; history.back(); }
+      else if (location.hash === HASH) try { history.replaceState(history.state, '', location.pathname + location.search); } catch (e) { /* ничего */ }
+    };
+    openers.forEach(b => b.addEventListener('click', () => open(false)));
+    $$('[data-cost-x]', cost).forEach(b => b.addEventListener('click', () => close(false)));
+    addEventListener('popstate', () => { if (location.hash === HASH) open(true); else close(true); });
+    addEventListener('keydown', e => {
+      if (!isOpen()) return;
+      if (e.key === 'Escape') { close(false); return; }
+      // Tab не уходит из окна на страницу под ним
+      if (e.key !== 'Tab') return;
+      const f = $$('button,a[href],input,[tabindex]:not([tabindex="-1"])', cost).filter(el => el.offsetParent !== null && !el.disabled);
+      if (!f.length) return;
+      const first = f[0], last = f[f.length - 1], cur = document.activeElement;
+      if (e.shiftKey && cur === first) { e.preventDefault(); last.focus(); }
+      else if (!e.shiftKey && cur === last) { e.preventDefault(); first.focus(); }
+    });
+
+    // «Обсудить программу» в конце окна — закрываем и ставим курсор в «Имя» сметы; если смета не на экране — подкатываем к ней
+    const go = $('.cost-go', cost);
+    if (go) go.addEventListener('click', () => {
+      close(false);
+      const sum = $('.co-sum'), inp = $('.co-fields input', co || document);
+      if (!sum) return;
+      setTimeout(() => {
+        const r = sum.getBoundingClientRect(), top = bar ? bar.offsetHeight : 0;
+        if (r.top < top || r.top > innerHeight * .5) {
+          const y = r.top + scrollY - top - 24;
+          if (window.kmkScroll && window.kmkScroll.to) window.kmkScroll.to(y); else scrollTo({ top: y, behavior: 'smooth' });
+        }
+        if (inp) inp.focus({ preventScroll: true });
+      }, 120);
+    });
+
+    // пришли по ссылке …/#dorogo — под окном сразу ставим страницу к смете, чтобы после закрытия посетитель был у цены.
+    // При перезагрузке браузер сам возвращает прежнюю прокрутку уже после нас — на эту загрузку её выключаем,
+    // а после load ставим страницу к смете ещё раз (шрифты и картинки к этому времени сдвигают вёрстку)
+    if (location.hash === HASH) {
+      const toSum = () => {
+        const sum = $('.co-sum');
+        if (!sum) return;
+        const y = sum.getBoundingClientRect().top + scrollY - (bar ? bar.offsetHeight : 0) - 24;
+        root.style.scrollBehavior = 'auto';
+        scrollTo(0, Math.max(0, y));
+        root.style.scrollBehavior = '';
+      };
+      const manual = 'scrollRestoration' in history;
+      if (manual) history.scrollRestoration = 'manual';
+      toSum();
+      addEventListener('load', () => { toSum(); if (manual) setTimeout(() => { history.scrollRestoration = 'auto'; }); }, { once: true });
+      open(true);
+    }
+  }
+
   // ── «Для компаний»: видео с интенсива. Немая петля грузится, когда блок подъезжает к окну, и играет, только пока
   // видна. Нажатие — весь ролик со звуком в окне видеоотзывов; пока оно открыто, петля стоит ──
   const coVid = $('.co-vid'), coWatch = $('.co-watch');
@@ -849,19 +991,42 @@
     });
   }
 
-  // плашка про cookies: показываем, пока посетитель не нажал «Хорошо»; хранилище может быть недоступно (приватный режим)
+  // плашка cookies: «Разрешить» включает Яндекс Метрику (window.kmkYm из <head>), «Только необходимые» — без неё.
+  // Пока выбора нет, Метрика не грузится. «Настройки cookies» в подвале открывают плашку снова.
+  // Хранилище может быть недоступно (приватный режим) — тогда плашка показывается при каждом заходе.
   const ck = $('.ck');
   if (ck) {
-    let seen = false;
-    try { seen = localStorage.getItem('kmk-ck') === '1'; } catch (e) { /* без хранилища просто покажем */ }
-    if (!seen) {
+    let choice = '';
+    try { choice = localStorage.getItem('kmk-ck') || ''; } catch (e) { /* без хранилища */ }
+    const show = delay => {
       ck.hidden = false;
-      setTimeout(() => ck.classList.add('is-on'), 1200);
-      $('.ck-ok', ck).addEventListener('click', () => {
-        try { localStorage.setItem('kmk-ck', '1'); } catch (e) { /* ничего */ }
-        ck.classList.remove('is-on');
-        setTimeout(() => { ck.hidden = true; }, 500);
-      });
-    }
+      setTimeout(() => ck.classList.add('is-on'), delay);
+    };
+    const hide = () => {
+      ck.classList.remove('is-on');
+      setTimeout(() => { ck.hidden = true; }, 500);
+    };
+    // старое значение '1' («Хорошо» без выбора) — спрашиваем заново
+    if (choice !== 'all' && choice !== 'need') show(1200);
+    ck.querySelectorAll('[data-ck]').forEach(b => b.addEventListener('click', () => {
+      const v = b.getAttribute('data-ck'), was = choice;
+      choice = v;
+      try { localStorage.setItem('kmk-ck', v); } catch (e) { /* ничего */ }
+      hide();
+      if (v === 'all' && window.kmkYm) window.kmkYm();
+      // отозвали согласие — стираем cookies Метрики и перезагружаем страницу без неё
+      if (v === 'need' && was === 'all') {
+        const host = location.hostname.replace(/^www\./, '');
+        document.cookie.split(';').map(x => x.split('=')[0].trim()).filter(n => /^_ym/.test(n)).forEach(n => {
+          ['', '; domain=' + host, '; domain=.' + host].forEach(d => { document.cookie = n + '=; Max-Age=0; path=/' + d; });
+        });
+        location.reload();
+      }
+    }));
+    document.addEventListener('click', e => {
+      if (!e.target.closest('[data-ck-open]')) return;
+      e.preventDefault();
+      show(30);
+    });
   }
 })();
